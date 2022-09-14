@@ -1,0 +1,35 @@
+<div class="container row">
+  <div class="col mr-1">
+    <button (click)="get400()" class="btn btn-danger btn-lg mr-3">
+      Get 400 Error
+    </button>
+  </div>
+  <div class="col-3">
+    <button (click)="get400Validation()" class="btn btn-danger btn-lg mr-3">
+      Get 400 Validation Error
+    </button>
+  </div>
+  <div class="col mr-1">
+    <button (click)="get401()" class="btn btn-danger btn-lg mr-3">
+      Get 401 Error
+    </button>
+  </div>
+  <div class="col mr-1">
+    <button (click)="get404()" class="btn btn-danger btn-lg mr-3">
+      Get 404 Error
+    </button>
+  </div>
+  <div class="col mr-1">
+    <button (click)="get500()" class="btn btn-danger btn-lg mr-3">
+      Get 500 Error
+    </button>
+  </div>
+
+  <ng-container *ngIf="validationErrors.length > 0">
+    <div class="text-warning h3 mt-5">
+      <ul>
+        <li *ngFor="let item of validationErrors">{{ item }}</li>
+      </ul>
+    </div>
+  </ng-container>
+</div>

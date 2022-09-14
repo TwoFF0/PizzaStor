@@ -1,0 +1,22 @@
+<div class="container text-large">
+  <h1 class="text-danger text-center">It's server error page</h1>
+  <br />
+  <ng-container *ngIf="error">
+    <h3>Here's the problem</h3>
+    <h4 class="text-danger">
+      {{ error.error.statusCode }} - {{ error.error.message }}
+    </h4>
+    <u></u>
+    <div style="background-color: whitesmoke">
+      <code class="text-secondary">
+        {{ error.error.details }}
+      </code>
+    </div>
+  </ng-container>
+  <br />
+  <div class="col text-center">
+    <button class="btn btn-info btn-lg text-center" routerLink="/">
+      Go to the home page.
+    </button>
+  </div>
+</div>
