@@ -1,34 +1,58 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaStore.Data;
+using PizzaStore.DTOs;
 using PizzaStore.Entities;
+using PizzaStore.Interfaces.Repositories;
 
 namespace PizzaStore.Controllers
 {
+    //[Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IUserRepository userRepository;
+        private readonly IMapper mapper;
 
-        public UsersController(DataContext context)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            this._context = context;
+            this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async IAsyncEnumerable<UserDto> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            await foreach (var user in this.userRepository.GetUsersAsync())
+            {
+                yield return mapper.Map<UserDto>(user);
+            }
         }
 
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<UserDto>> GetUser(int id) => mapper.Map<UserDto>(await userRepository.GetUserByIdAsync(id));
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult<UserDto>> GetUser(string username) => mapper.Map<UserDto>(await userRepository.GetUserByUserNameAsync(username));
+
+        [HttpPost]
+        public async Task<ActionResult<UserDto>> PostUser(User user)
         {
-            return await _context.Users.FindAsync(id);
+            if (user is null)
+            {
+                return BadRequest("Empty user");
+            }
+
+            return mapper.Map<UserDto>(await this.userRepository.PostUserAsync(user));
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<bool>> DeleteUser(int id)
+        {
+            return await this.userRepository.DeleteUserAsync(id);
         }
     }
 }

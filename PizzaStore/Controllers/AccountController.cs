@@ -36,7 +36,7 @@ namespace PizzaStore.Controllers
 
             var user = new User()
             {
-                Name = registerDto.UserName.ToLower(),
+                UserName = registerDto.UserName.ToLower(),
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key
             };
@@ -46,7 +46,7 @@ namespace PizzaStore.Controllers
 
             return new AccountDto()
             {
-                UserName = user.Name,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }
@@ -54,7 +54,7 @@ namespace PizzaStore.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AccountDto>> Login(LoginDto loginDto)
         {
-            var user = await _dataContext.Users.SingleOrDefaultAsync(x => x.Name == loginDto.UserName);
+            var user = await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
             if (user is null)
                 return Unauthorized("Invalid username");
@@ -68,11 +68,11 @@ namespace PizzaStore.Controllers
 
             return new AccountDto()
             {
-                UserName = user.Name,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }
 
-        private async Task<bool> UserExist(string userName) => await _dataContext.Users.AnyAsync(x => x.Name == userName.ToLower());
+        private async Task<bool> UserExist(string userName) => await _dataContext.Users.AnyAsync(x => x.UserName == userName.ToLower());
     }
 }

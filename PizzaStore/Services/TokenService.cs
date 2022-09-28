@@ -23,7 +23,7 @@ namespace PizzaStore.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.Name),
+                new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
             };
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

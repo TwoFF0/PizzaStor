@@ -6,8 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PizzaStore.Data;
+using PizzaStore.Data.Repositories;
+using PizzaStore.Extensions;
+using PizzaStore.Infrastructure;
 using PizzaStore.Interfaces;
+using PizzaStore.Interfaces.Repositories;
 using PizzaStore.Middleware;
 using PizzaStore.Services;
 
@@ -31,6 +36,9 @@ namespace PizzaStore
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddControllers();
             services.AddCors();
@@ -45,12 +53,22 @@ namespace PizzaStore
                         ValidateAudience = false,
                     };
                 });
+
+            services.AddSwaggerGen(c =>
+          {
+              c.SwaggerDoc("v1", new OpenApiInfo { Title = "NorthWindInMemory", Version = "v1" });
+          });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionMiddleware();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
+
 
             // app.UseHttpsRedirection();
 

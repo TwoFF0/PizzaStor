@@ -9,7 +9,7 @@ namespace PizzaStore.Data
         {
         }
 
-        public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public DbSet<User> Users { get; set; }
     }
