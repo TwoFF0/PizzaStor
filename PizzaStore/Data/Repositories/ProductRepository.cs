@@ -20,6 +20,9 @@ namespace PizzaStore.Data.Repositories
 
         public async Task<Product> GetProductByIdAsync(int id) => await this.context.Products.FindAsync(id);
 
+        // public async Task<string[]> GetProductCategoriesAsync() {
+
+        // }
 
         public async IAsyncEnumerable<Product> GetProductsByCategoryAsync(string category)
         {

@@ -23,5 +23,7 @@ namespace PizzaStore.Entities
         public string Recipe { get; set; }
 
         public byte[] Image { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

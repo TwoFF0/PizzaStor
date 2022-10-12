@@ -23,7 +23,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'orders', component: OrdersComponent },
-      { path: 'edit-profile', component: ProfileComponent },
+      { path: 'view-profile', component: ProfileComponent },
     ],
   },
   { path: '**', component: HomeComponent, pathMatch: 'full' },

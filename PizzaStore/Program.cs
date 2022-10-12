@@ -26,7 +26,7 @@ namespace PizzaStore
             {
                 var context = services.GetRequiredService<DataContext>();
                 await context.Database.MigrateAsync();
-                SeedData.GenerateSeedData(context, 10);
+                SeedData.GenerateSeedData(context, 50);
 
             }
             catch (Exception e)

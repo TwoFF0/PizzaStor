@@ -1,5 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { Product } from './../_models/Product';
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../_services/product.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalsComponent } from '../_modals/modals/modals.component';
 
 @Component({
   selector: 'app-home',
@@ -7,19 +10,38 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  users: any;
+  products: Product[];
+  categories: string[] = ['Pizza', 'Beverages', 'Desserts', 'Other'];
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private productService: ProductService,
+    private modalService: NgbModal
+  ) {}
 
-  ngOnInit(): void {
-    this.getUsers();
+  async ngOnInit(): Promise<void> {
+    await this.getUser();
   }
 
-  getUsers() {
-    this.httpClient
-      .get('http://localhost:5000/api/users')
-      .subscribe((response) => {
-        this.users = response;
-      });
+  async getUser() {
+    this.products = await this.productService.getProducts();
+  }
+
+  filterProductsByCategory(category: string) {
+    return this.products.filter((x) => x.category == category);
+  }
+
+  openModal(product: Product) {
+    const modalRef = this.modalService.open(ModalsComponent, {
+      centered: true,
+      size: 'lg',
+    });
+
+    modalRef.componentInstance.modalProduct = product;
+
+    modalRef.componentInstance.passEntry.subscribe(
+      (receivedEntryToCart: Product) => {
+        console.log(receivedEntryToCart);
+      }
+    );
   }
 }

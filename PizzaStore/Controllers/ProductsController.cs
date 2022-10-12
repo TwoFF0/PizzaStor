@@ -28,7 +28,7 @@ namespace PizzaStore.Controllers
         {
             await foreach (var product in repository.GetAllProductsAsync())
             {
-               yield return mapper.Map<ProductDto>(product);
+                yield return mapper.Map<ProductDto>(product);
             }
         }
 

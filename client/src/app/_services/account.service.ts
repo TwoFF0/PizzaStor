@@ -1,25 +1,26 @@
-import { User } from './../_models/user';
+import { UserAuth } from '../_models/UserAuth';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  baseUrl = 'http://localhost:5000/api/';
-  private currentUserSource = new ReplaySubject<User>(1);
+  baseUrl = environment.apiUrl;
+  private currentUserSource = new ReplaySubject<UserAuth>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private HttpClient: HttpClient) {}
 
   login(model: any) {
-    return this.HttpClient.post<User>(
+    return this.HttpClient.post<UserAuth>(
       this.baseUrl + 'account/login',
       model
     ).pipe(
-      map((response: User) => {
+      map((response: UserAuth) => {
         const user = response;
         if (user) {
           localStorage.setItem('user', JSON.stringify(user));
@@ -33,7 +34,7 @@ export class AccountService {
   }
 
   register(model: any) {
-    return this.HttpClient.post<User>(
+    return this.HttpClient.post<UserAuth>(
       this.baseUrl + 'account/register',
       model
     ).pipe(
@@ -51,7 +52,7 @@ export class AccountService {
     );
   }
 
-  setCurrentUser(user: User) {
+  setCurrentUser(user: UserAuth) {
     this.currentUserSource.next(user);
   }
 

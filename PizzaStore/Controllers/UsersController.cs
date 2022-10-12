@@ -11,7 +11,7 @@ using PizzaStore.Interfaces.Repositories;
 
 namespace PizzaStore.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository userRepository;

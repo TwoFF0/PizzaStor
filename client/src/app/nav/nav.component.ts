@@ -18,15 +18,21 @@ export class NavComponent implements OnInit {
     this.accountService.login(this.model).subscribe((_) => {
       console.log(this.model);
       this.router.navigateByUrl('/');
+      this.reloadPage();
     });
   }
 
   logout() {
     this.accountService.logout();
     this.router.navigateByUrl('/');
+    this.reloadPage();
   }
 
   registerToggle() {
     this.router.navigateByUrl('/register');
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 }

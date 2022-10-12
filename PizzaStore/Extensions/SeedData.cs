@@ -34,16 +34,24 @@ namespace PizzaStore.Extensions
 
             using var webClient = new WebClient();
             var photo = webClient.DownloadData(urls[0]);
+            var categories = new List<string>()
+            {
+                "Pizza",
+                "Beverages",
+                "Desserts",
+                "Other"
+            };
 
             if (!context.Products.Any())
             {
                 context.Products.AddRange(new Faker<Product>("en")
-                    .RuleFor(x => x.Category, x => x.Commerce.Categories(1).First())
+                    .RuleFor(x => x.Category, x => categories[x.Random.Int(0, 3)])
                     .RuleFor(x => x.Description, x => x.Commerce.ProductDescription())
                     .RuleFor(x => x.Name, x => x.Commerce.ProductName())
-                    .RuleFor(x => x.Price, x => Math.Round(x.Random.Double()))
+                    .RuleFor(x => x.Price, x => Math.Round(x.Random.Double(4, 25)) - 0.01)
                     .RuleFor(x => x.Recipe, x => x.Lorem.Sentence(15))
                     .RuleFor(x => x.Image, x => photo)
+                    .RuleFor(x => x.ImageUrl, x => urls[0])
                     .Generate(itemCount));
 
                 context.SaveChanges();

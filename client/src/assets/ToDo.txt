@@ -1,0 +1,14 @@
+nav bar + id
+fix prices
+
+cart
+profile
+orders
+
+      modal+description
+      modal(image scale);
+modal+login
+
+slider
+auth + mail
+
