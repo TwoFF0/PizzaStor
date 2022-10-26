@@ -10,6 +10,7 @@ namespace PizzaStore.Infrastructure
         {
             CreateMap<User, UserDto>();
             CreateMap<Product, ProductDto>();
+            CreateMap<ProductSize, ProductSizeDto>();
         }
     }
 }

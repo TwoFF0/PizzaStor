@@ -1,4 +1,6 @@
-﻿namespace PizzaStore.DTOs
+﻿using PizzaStore.Entities;
+
+namespace PizzaStore.DTOs
 {
     public class ProductDto
     {
@@ -10,10 +12,6 @@
 
         public string Description { get; set; }
 
-        public double Price { get; set; }
-
-        public byte[] Image { get; set; }
-
-        public string ImageUrl { get; set; }
+        public  ProductSizeDto ProductSize { get; set; }
     }
 }

@@ -27,13 +27,32 @@ namespace PizzaStore.Extensions
                 throw new ArgumentOutOfRangeException($"{itemCount} cannot be less or equal zero");
             }
 
-            string[] urls =
+            string[] photos =
             {
-                "https://cdn.dodostatic.net/static/Img/Products/0396966407204134944ac9f7c580a666_292x292.png"
+                "https://cdn.dodostatic.net/static/Img/Products/de603d5d277e4803af12f72101caf067_233x233.png",
+                "https://cdn.dodostatic.net/static/Img/Products/f04f6e1cd2004bfa83389a3563076053_292x292.png",
+                "https://cdn.dodostatic.net/static/Img/Products/85286afe65d6492f9f0cabdb41886e4f_366x366.png"
             };
 
-            using var webClient = new WebClient();
-            var photo = webClient.DownloadData(urls[0]);
+            string[] otherPhotos =
+            {
+                "https://cdn.dodostatic.net/static/Img/Products/d224a75b54cd48008621053fb23f725c_292x292.jpeg"
+            };
+
+            string[] sizes =
+            {
+                "S",
+                "M",
+                "L"
+            };
+
+            var dict = new Dictionary<int, double>()
+            {
+                {0, 1},
+                {1, 1.35},
+                {2, 1.85}
+            };
+
             var categories = new List<string>()
             {
                 "Pizza",
@@ -42,20 +61,73 @@ namespace PizzaStore.Extensions
                 "Other"
             };
 
+            var random = new Random();
+
             if (!context.Products.Any())
             {
-                context.Products.AddRange(new Faker<Product>("en")
-                    .RuleFor(x => x.Category, x => categories[x.Random.Int(0, 3)])
-                    .RuleFor(x => x.Description, x => x.Commerce.ProductDescription())
-                    .RuleFor(x => x.Name, x => x.Commerce.ProductName())
-                    .RuleFor(x => x.Price, x => Math.Round(x.Random.Double(4, 25)) - 0.01)
-                    .RuleFor(x => x.Recipe, x => x.Lorem.Sentence(15))
-                    .RuleFor(x => x.Image, x => photo)
-                    .RuleFor(x => x.ImageUrl, x => urls[0])
-                    .Generate(itemCount));
+                for (int i = 0; i < itemCount; i++)
+                {
+                    var templateProduct = new Faker<Product>("en")
+                        .RuleFor(x => x.Category, x => categories[x.Random.Int(0, 2)])
+                        .RuleFor(x => x.Description, x => x.Commerce.ProductDescription())
+                        .RuleFor(x => x.Name, x => x.Commerce.ProductName());
 
-                context.SaveChanges();
+                    var smallWeight = random.Next(450, 550);
+                    var smallPrice = random.Next(5, 12);
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        var productSize = new Faker<ProductSize>("en")
+                            .RuleFor(x => x.ImageUrl, x => photos[j])
+                            .RuleFor(x => x.Size, x => sizes[j])
+                            .RuleFor(x => x.Price, x => Math.Round(smallPrice * dict[j]) - 0.01)
+                            .RuleFor(x => x.Weight, x => Convert.ToInt32(smallWeight * dict[j]).RoundOff()).Generate();
+
+
+                        if (j == 0)
+                        {
+                            context.Products.Add(templateProduct.RuleFor(x => x.ProductSize, x => productSize));
+                        }
+                        else
+                        {
+                            var generatedProduct = context.Products.Find(3 * i + 1);
+
+                            var product = new Faker<Product>("en")
+                                .RuleFor(x => x.Category, x => generatedProduct.Category)
+                                .RuleFor(x => x.Description, x => generatedProduct.Description)
+                                .RuleFor(x => x.Name, x => generatedProduct.Name)
+                                .RuleFor(x => x.ProductSize, x => productSize);
+
+                            context.Products.Add(product);
+                        }
+
+                        context.SaveChanges();
+                    }
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var product = new Faker<Product>("en")
+                        .RuleFor(x => x.Category, x => categories[3])
+                        .RuleFor(x => x.Description, x => x.Commerce.ProductDescription())
+                        .RuleFor(x => x.Name, x => x.Commerce.ProductName());
+
+                    var Weight = random.Next(100, 200);
+                    var Price = random.Next(5, 12);
+
+                    var productSize = new Faker<ProductSize>("en")
+                        .RuleFor(x => x.ImageUrl, x => otherPhotos[0])
+                        .RuleFor(x => x.Price, x => Math.Round(Price * 1.3) - 0.01)
+                        .RuleFor(x => x.Weight, x => Convert.ToInt32(Weight).RoundOff()).Generate();
+
+                    product.RuleFor(x => x.ProductSize, x => productSize);
+
+                    context.Products.Add(product);
+
+                    context.SaveChanges();
+                }
             }
+
 
             if (!context.Users.Any())
             {
@@ -66,16 +138,16 @@ namespace PizzaStore.Extensions
                     var passSalt = hmac.Key;
 
                     context.Users.Add(new Faker<User>("en")
-                        .RuleFor(x => x.Age, f => f.Random.Number(14, 99))
-                        .RuleFor(x => x.UserName, f => f.Person.UserName.ToLower())
-                        .RuleFor(x => x.City, f => f.Address.City())
-                        .RuleFor(x => x.Country, f => f.Address.Country())
-                        .RuleFor(x => x.FirstName, f => f.Name.FirstName())
-                        .RuleFor(x => x.LastName, f => f.Name.LastName())
-                        .RuleFor(x => x.CreatedAt, f => f.Date.Past(5))
-                        .RuleFor(x => x.LastActive, f => f.Date.Past(5))
-                        .RuleFor(x => x.PasswordHash, f => passwordHash)
-                        .RuleFor(x => x.PasswordSalt, f => passSalt));
+                                    .RuleFor(x => x.Age, f => f.Random.Number(14, 99))
+                                    .RuleFor(x => x.UserName, f => f.Person.UserName.ToLower())
+                                    .RuleFor(x => x.City, f => f.Address.City())
+                                    .RuleFor(x => x.Country, f => f.Address.Country())
+                                    .RuleFor(x => x.FirstName, f => f.Name.FirstName())
+                                    .RuleFor(x => x.LastName, f => f.Name.LastName())
+                                    .RuleFor(x => x.CreatedAt, f => f.Date.Past(5))
+                                    .RuleFor(x => x.LastActive, f => f.Date.Past(5))
+                                    .RuleFor(x => x.PasswordHash, f => passwordHash)
+                                    .RuleFor(x => x.PasswordSalt, f => passSalt));
                 }
 
                 context.SaveChanges();

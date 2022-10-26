@@ -1,0 +1,105 @@
+<ng-container *ngIf="!registration">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-11">
+        <h4 class="modal-title text-success text-center ps-5 pb-3">Sign in</h4>
+      </div>
+      <div class="col-1">
+        <button
+          type="button"
+          class="btn-close pb-3 ps-3"
+          aria-label="Close"
+          (click)="activeModal.dismiss('Cross click')"
+        ></button>
+      </div>
+    </div>
+
+    <form
+      #loginForm="ngForm"
+      class="d-flex flex-column flex-nowrap mt-2 mt-md-0"
+      (ngSubmit)="login()"
+      autocomplete="off"
+    >
+      <input
+        name="username"
+        [(ngModel)]="entity.username"
+        class="form-control mb-2 mr-sm-2"
+        type="text"
+        placeholder="Username"
+        ngbAutofocus
+      />
+      <input
+        name="password"
+        [(ngModel)]="entity.password"
+        class="form-control mb-2 mr-sm-2"
+        type="password"
+        placeholder="Password"
+      />
+
+      <div class="d-flex flex-row justify-content-center">
+        <button class="btn btn-primary me-3 my-0" type="submit">Login</button>
+        <button
+          class="btn btn-primary my-0 ms-3"
+          type="button"
+          (click)="registerToggle()"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="registration">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-11">
+        <h4 class="modal-title text-success text-center ps-5 pb-3">Sign Up</h4>
+      </div>
+      <div class="col-1">
+        <button
+          type="button"
+          class="btn-close pb-3 ps-3"
+          aria-label="Close"
+          (click)="activeModal.dismiss('Cross click')"
+        ></button>
+      </div>
+    </div>
+
+    <form
+      #loginForm="ngForm"
+      class="d-flex flex-column flex-nowrap mt-2 mt-md-0"
+      (ngSubmit)="register()"
+      autocomplete="off"
+    >
+      <input
+        name="username"
+        [(ngModel)]="entity.username"
+        class="form-control mb-2 mr-sm-2"
+        type="text"
+        placeholder="Username"
+        ngbAutofocus
+      />
+      <input
+        name="password"
+        [(ngModel)]="entity.password"
+        class="form-control mb-2 mr-sm-2"
+        type="password"
+        placeholder="Password"
+      />
+
+      <div class="d-flex flex-row justify-content-center">
+        <button class="btn btn-primary me-3 my-0" type="submit">
+          Register
+        </button>
+        <button
+          class="btn btn-primary my-0 ms-3"
+          type="button"
+          (click)="close()"
+        >
+          Close
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>

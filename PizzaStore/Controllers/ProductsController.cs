@@ -33,10 +33,10 @@ namespace PizzaStore.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDto>> GetProduct(int id) => Ok(mapper.Map<ProductDto>(await repository.GetProductByIdAsync(id)));
+        public async Task<ActionResult<ProductDto>> GetProductById(int id) => Ok(mapper.Map<ProductDto>(await repository.GetProductByIdAsync(id)));
 
         [HttpGet("{category}")]
-        public async IAsyncEnumerable<ActionResult<ProductDto>> GetProduct(string category)
+        public async IAsyncEnumerable<ActionResult<ProductDto>> GetProductByCategory(string category)
         {
             await foreach (var product in repository.GetProductsByCategoryAsync(category))
             {
@@ -58,48 +58,48 @@ namespace PizzaStore.Controllers
         [HttpDelete]
         public async Task<ActionResult<bool>> DeleteProduct(int id) => Ok(await repository.DeleteProductAsync(id));
 
-        [HttpGet("{id:int}/image")]
-        public async Task<IActionResult> GetProductPhoto(int id)
-        {
-            var photo = await this.repository.GetProductPhotoAsync(id);
+        //[HttpGet("{id:int}/image")]
+        //public async Task<IActionResult> GetProductPhoto(int id)
+        //{
+        //    var photo = await this.repository.GetProductPhotoAsync(id);
 
-            if (photo is null)
-            {
-                return this.NotFound();
-            }
+        //    if (photo is null)
+        //    {
+        //        return this.NotFound();
+        //    }
 
-            return this.File(photo, "image/png");
-        }
+        //    return this.File(photo, "image/png");
+        //}
 
-        [HttpPost("{id:int}/image")]
-        public async Task<IActionResult> PostProductPhoto(int id, IFormFile image)
-        {
-            if (image is null)
-            {
-                return this.BadRequest();
-            }
+        //[HttpPost("{id:int}/image")]
+        //public async Task<IActionResult> PostProductPhoto(int id, IFormFile image)
+        //{
+        //    if (image is null)
+        //    {
+        //        return this.BadRequest();
+        //    }
 
-            await using var ms = new MemoryStream();
-            await image.CopyToAsync(ms);
+        //    await using var ms = new MemoryStream();
+        //    await image.CopyToAsync(ms);
 
-            if (!await this.repository.PostProductPhotoAsync(id, ms))
-            {
-                return this.NotFound();
-            }
+        //    if (!await this.repository.PostProductPhotoAsync(id, ms))
+        //    {
+        //        return this.NotFound();
+        //    }
 
-            return this.NoContent();
-        }
+        //    return this.NoContent();
+        //}
 
-        [HttpDelete("{id}/photo")]
-        public async Task<IActionResult> DeletePhotoAsync(int id)
-        {
-            if (!await this.repository.DeleteProductPhotoAsync(id))
-            {
-                return this.NotFound();
-            }
+        //[HttpDelete("{id}/photo")]
+        //public async Task<IActionResult> DeletePhotoAsync(int id)
+        //{
+        //    if (!await this.repository.DeleteProductPhotoAsync(id))
+        //    {
+        //        return this.NotFound();
+        //    }
 
-            return this.NoContent();
-        }
+        //    return this.NoContent();
+        //}
 
     }
 }

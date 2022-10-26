@@ -1,0 +1,35 @@
+<section class="row mb-5">
+  <article
+    *ngFor="let product of uniqueProducts"
+    class="col-sm-3 mb-5 me-0 mt-2 p-0"
+  >
+    <main style="height: 450px">
+      <img
+        class="rounded mx-auto d-block mt-3 mx-0"
+        src="{{ product.productSize.imageUrl }}"
+        style="height: 292px; width: 292px"
+      />
+      <p class="text-primary h5">{{ product.name }}</p>
+      <ng-container *ngIf="product.category == 'Other'; else productWeight">
+        <p *ngIf="product.productSize.size" class="text-muted d-inline">
+          {{ product.productSize.size }} size,
+        </p>
+        <p class="text-muted d-inline">{{ product.productSize.weight }} g.</p>
+      </ng-container>
+      <ng-template #productWeight>
+        <p *ngIf="product.productSize.size" class="text-muted d-inline">
+          {{ product.productSize.size }} size,
+        </p>
+        <p class="text-muted d-inline">
+          Traditional dough, {{ product.productSize.weight }} g.
+        </p>
+      </ng-template>
+
+      <div class="d-flex justify-content-between">
+        <p class="h4 text-black me-5 pe-5">
+          ${{ product.productSize.price }} US
+        </p>
+      </div>
+    </main>
+  </article>
+</section>

@@ -20,15 +20,10 @@ namespace PizzaStore.Data.Repositories
 
         public async Task<Product> GetProductByIdAsync(int id) => await this.context.Products.FindAsync(id);
 
-        // public async Task<string[]> GetProductCategoriesAsync() {
-
-        // }
-
         public async IAsyncEnumerable<Product> GetProductsByCategoryAsync(string category)
         {
-            var products = await this.context.Products.Where(x => x.Category == category).ToListAsync();
 
-            foreach (var product in products)
+            await foreach (var product in this.context.Products.Where(x => x.Category == category).Include(x => x.ProductSize).AsAsyncEnumerable())
             {
                 yield return product;
             }
@@ -36,7 +31,7 @@ namespace PizzaStore.Data.Repositories
 
         public async IAsyncEnumerable<Product> GetAllProductsAsync()
         {
-            await foreach (var product in this.context.Products)
+            await foreach (var product in this.context.Products.Include(x => x.ProductSize).AsAsyncEnumerable())
             {
                 yield return product;
             }
@@ -61,49 +56,49 @@ namespace PizzaStore.Data.Repositories
 
         }
 
-        public async Task<byte[]> GetProductPhotoAsync(int id)
-        {
-            var product = await context.Products.FindAsync(id);
+        //public async Task<byte[]> GetProductPhotoAsync(int id)
+        //{
+        //    var product = await context.Products.FindAsync(id);
 
-            return product?.Image;
-        }
+        //    return product?.Image;
+        //}
 
-        public async Task<bool> PostProductPhotoAsync(int id, Stream stream)
-        {
-            if (stream is null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+        //public async Task<bool> PostProductPhotoAsync(int id, Stream stream)
+        //{
+        //    if (stream is null)
+        //    {
+        //        throw new ArgumentNullException(nameof(stream));
+        //    }
 
-            var product = await context.Products.FindAsync(id);
+        //    var product = await context.Products.FindAsync(id);
 
-            using var memStream = (MemoryStream) stream;
-            var img = new byte[memStream.Length];
-            Array.Copy(memStream.ToArray(), 0, img, 0, memStream.Length);
+        //    using var memStream = (MemoryStream) stream;
+        //    var img = new byte[memStream.Length];
+        //    Array.Copy(memStream.ToArray(), 0, img, 0, memStream.Length);
 
-            if (product is not null)
-            {
-                product.Image = img;
-                await this.context.SaveChangesAsync();
-                return true;
-            }
+        //    if (product is not null)
+        //    {
+        //        product.Image = img;
+        //        await this.context.SaveChangesAsync();
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        public async Task<bool> DeleteProductPhotoAsync(int id)
-        {
-            var product = await context.Products.FindAsync(id);
+        //public async Task<bool> DeleteProductPhotoAsync(int id)
+        //{
+        //    var product = await context.Products.FindAsync(id);
 
-            if (product is null)
-            {
-                return false;
-            }
+        //    if (product is null)
+        //    {
+        //        return false;
+        //    }
 
-            product.Image = null;
-            await this.context.SaveChangesAsync();
+        //    product.Image = null;
+        //    await this.context.SaveChangesAsync();
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

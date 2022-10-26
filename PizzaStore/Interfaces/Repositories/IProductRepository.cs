@@ -17,11 +17,11 @@ namespace PizzaStore.Interfaces.Repositories
 
         public Task<bool> DeleteProductAsync(int id);
 
-        public Task<byte[]> GetProductPhotoAsync(int id);
+        //public Task<byte[]> GetProductPhotoAsync(int id);
 
-        public Task<bool> PostProductPhotoAsync(int id, Stream stream);
+        //public Task<bool> PostProductPhotoAsync(int id, Stream stream);
 
-        public Task<bool> DeleteProductPhotoAsync(int id);
+        //public Task<bool> DeleteProductPhotoAsync(int id);
 
     }
 }
