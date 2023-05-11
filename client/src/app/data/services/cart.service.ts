@@ -60,6 +60,10 @@ export class CartService {
   }
 
   async setOrderItems(plainCart: string) {
+    if (!plainCart) {
+      return;
+    }
+
     await this.getProducts();
 
     const plainItems = plainCart.split('|').slice(0, -1);
