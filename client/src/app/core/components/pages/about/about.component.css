@@ -1,0 +1,33 @@
+.business-info {
+  margin-top: 50px;
+}
+
+.business-info h2 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff7f50;
+  margin-bottom: 20px;
+}
+
+.business-info p {
+  font-size: 18px;
+  color: #4d4d4d;
+  line-height: 1.5;
+}
+
+.business-info ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.business-info ul li {
+  font-size: 18px;
+  color: #4d4d4d;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.business-info ul li a {
+  color: #4d4d4d;
+}

@@ -22,7 +22,7 @@ export class AuthenticateModalComponent implements OnInit {
   login() {
     this.accountService.login(this.entity).subscribe((_) => {
       this.activeModal.dismiss();
-      // this.reloadPage();
+      this.reloadPage();
     });
   }
 

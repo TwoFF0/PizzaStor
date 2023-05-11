@@ -1,8 +1,8 @@
 import { Product } from '../../../data/models/Product';
 import { Component, OnInit } from '@angular/core';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductSize } from 'src/app/data/models/ProductSize';
-import { CartService } from 'src/app/data/services/cart.service';
 import { ProductService } from 'src/app/data/services/product.service';
 import { ProductModalViewComponent } from 'src/app/features/products/productModal/productModalView.component';
 
@@ -20,10 +20,10 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {}
 
-  async ngOnInit(): Promise<any> {
+  async ngOnInit(): Promise<void> {
     await this.getProducts();
   }
 
@@ -35,15 +35,6 @@ export class HomeComponent implements OnInit {
     this.getMinimalPricesToDisplay(category);
     this.retrievePhoto(category);
     return this.products.filter((x) => x.category === category);
-  }
-
-  openModal(product: Product) {
-    const modalRef = this.modalService.open(ProductModalViewComponent, {
-      centered: true,
-      size: 'lg',
-    });
-
-    modalRef.componentInstance.selectedProduct = product;
   }
 
   getMinimalPricesToDisplay(category: string) {
@@ -62,5 +53,14 @@ export class HomeComponent implements OnInit {
       .flat()
       .filter((x) => x.size == 'M' || x.size == undefined || x.size == null)
       .map((x) => x.imageUrl);
+  }
+
+  openModal(product: Product) {
+    const modalRef = this.modalService.open(ProductModalViewComponent, {
+      centered: true,
+      size: 'lg',
+    });
+
+    modalRef.componentInstance.selectedProduct = product;
   }
 }

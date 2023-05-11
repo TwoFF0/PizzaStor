@@ -30,6 +30,7 @@
     "font-awesome": "^4.7.0",
     "ngx-bootstrap": "^9.0.0",
     "ngx-cookie-service": "^14.0.1",
+    "ngx-page-scroll": "^9.0.0",
     "ngx-toastr": "^15.0.0",
     "rxjs": "~7.5.0",
     "toastr": "^2.1.4",

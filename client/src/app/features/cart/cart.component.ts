@@ -1,9 +1,7 @@
 import { CartService } from 'src/app/data/services/cart.service';
-import { Product } from '../../../../data/models/Product';
 import { Component, OnInit } from '@angular/core';
 import { OrderItem } from 'src/app/data/models/OrderItem';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cart',
@@ -11,25 +9,17 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  orderItems: OrderItem[];
-  total: number;
   constructor(private cartService: CartService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.getProducts();
-    this.getTotal();
+  ngOnInit(): void {}
 
-    console.log(this.cartService.products);
+  get orderItems(): OrderItem[] {
+    return this.cartService.orderItems;
   }
 
-  getProducts() {
-    this.orderItems = this.cartService.orderItems;
-  }
-
-  getTotal() {
-    return this.orderItems
-      .map((x) => x.price * x.count)
-      .reduce((acc, curr) => acc + curr, 0)
+  get total(): number {
+    return +this.orderItems
+      .reduce((acc, item) => acc + item.price * item.count, 0)
       .toFixed(2);
   }
 

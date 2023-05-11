@@ -23,10 +23,8 @@ export class CartService {
   plainOrder: string;
 
   addToCart(itemToAdd: OrderItem) {
-    if (!this.storage.getItem('user')) {
-      this.toastr.info('Please Log in before making an order :)');
-      this.toModalAuthenticate();
-
+    if (!this.isUserLoggedIn()) {
+      this.showLoginPrompt();
       return;
     }
 
@@ -34,43 +32,28 @@ export class CartService {
       this.storage.addItem('cart', '');
     }
 
-    if (itemToAdd.size == null) {
-      itemToAdd.size = 'WS';
-    }
+    const cart = this.storage.getItem('cart') || '';
+    const size = itemToAdd.size || 'WS';
+    const orderItemString = this.createOrderItemString(itemToAdd, size);
 
     this.fillOrderItems(itemToAdd);
 
-    if (
-      this.storage
-        .getItem('cart')!
-        .includes(itemToAdd.id + '.' + itemToAdd.size)
-    ) {
+    if (cart.includes(orderItemString)) {
       this.changeCount(itemToAdd, true);
-    } else {
-      this.storage.addItem(
-        'cart',
-        this.storage.getItem('cart')! +
-          itemToAdd.id +
-          '.' +
-          itemToAdd.size +
-          '.' +
-          itemToAdd.count +
-          '|'
-      );
+      return;
     }
+
+    this.storage.addItem('cart', cart + orderItemString);
   }
 
   fillOrderItems(itemToAdd: OrderItem) {
-    if (
-      this.orderItems.find(
-        (x) => x.name == itemToAdd.name && x.size == itemToAdd.size
-      )
-    ) {
-      let item = this.orderItems.find(
-        (x) => x.name == itemToAdd.name && x.size == itemToAdd.size
-      )!;
+    const { name, size } = itemToAdd;
+    const existingItem = this.orderItems.find(
+      (x) => x.name === name && x.size === size
+    );
 
-      item.count++;
+    if (existingItem) {
+      existingItem.count++;
     } else {
       this.orderItems.push(itemToAdd);
     }
@@ -78,77 +61,76 @@ export class CartService {
 
   async setOrderItems(plainCart: string) {
     await this.getProducts();
-    let plainItems = plainCart.split('|');
 
-    for (let i = 0; i < plainItems.length - 1; i++) {
-      let foundedProduct = this.products.find(
-        (x) => x.id == +plainItems[i].split('.')[0]
-      )!;
+    const plainItems = plainCart.split('|').slice(0, -1);
 
-      let size = plainItems[i].split('.')[1];
+    for (const plainItem of plainItems) {
+      const [id, size, count] = plainItem.split('.');
+      const product = this.products.find((p) => p.id === +id);
+      const productSize = product?.productSize.find(
+        (s) => s.size === size || !s.size
+      );
 
-      let foundedSize = foundedProduct.productSize.find(
-        (x) => x.size == size || x.size == null
-      )!;
-
-      if (foundedSize.size == null) {
-        foundedSize.size = 'WS';
+      if (!product || !productSize) {
+        continue;
       }
 
-      this.fillOrderItems({
-        id: foundedProduct.id,
-        name: foundedProduct.name,
-        size: foundedSize.size,
-        price: foundedSize.price,
-        weight: foundedSize.weight,
-        imageUrl: foundedSize.imageUrl,
-        count: +plainItems[i].split('.')[2],
-      } as OrderItem);
+      const orderItem: OrderItem = {
+        id: product.id,
+        name: product.name,
+        size: productSize.size || 'WS',
+        price: productSize.price,
+        weight: productSize.weight,
+        imageUrl: productSize.imageUrl,
+        count: +count,
+      };
 
-      console.log(foundedSize.size);
+      this.fillOrderItems(orderItem);
     }
-
-    console.log(this.orderItems);
   }
 
   async getProducts() {
     this.products = await this.productService.getProducts();
   }
 
-  changeCount(orderItem: OrderItem, addition: boolean) {
-    let oldOrders = this.storage.getItem('cart')!;
-
-    let count = +oldOrders
-      .substring(oldOrders.indexOf(orderItem.id + '.' + orderItem.size))
-      .split('|')[0]
-      .split('.')[2];
-
-    let changedCount: number;
-
-    if (addition) {
-      changedCount = count + 1;
-    } else {
-      changedCount = count - 1;
+  changeCount(orderItem: OrderItem, increment: boolean) {
+    const cart = this.storage.getItem('cart');
+    if (!cart) {
+      throw new Error('Cart is empty.');
     }
 
-    let newOrders = '';
-
-    if (changedCount == 0) {
-      newOrders = oldOrders.replace(
-        orderItem.id + '.' + orderItem.size + '.' + count + '|',
-        ''
-      );
-    } else {
-      newOrders = oldOrders.replace(
-        orderItem.id + '.' + orderItem.size + '.' + count,
-        orderItem.id + '.' + orderItem.size + '.' + changedCount
-      );
+    const searchStr = `${orderItem.id}.${orderItem.size}.`;
+    const regex = new RegExp(`${searchStr}(\\d+)\\|`);
+    const match = cart.match(regex);
+    if (!match) {
+      throw new Error('Order item not found in cart.');
     }
 
-    console.log(changedCount);
-    console.log(newOrders);
+    const count = parseInt(match[1]);
+    const newCount = increment ? count + 1 : count - 1;
 
-    this.storage.addItem('cart', newOrders);
+    if (newCount === 0) {
+      const newCart = cart.replace(regex, '');
+      this.storage.addItem('cart', newCart);
+
+      return;
+    }
+
+    const newCart = cart.replace(regex, `${searchStr}${newCount}|`);
+    this.storage.addItem('cart', newCart);
+  }
+
+  isUserLoggedIn() {
+    return !!this.storage.getItem('user');
+  }
+
+  showLoginPrompt() {
+    this.toastr.info('Please Log in before making an order :)');
+    this.toModalAuthenticate();
+  }
+
+  createOrderItemString(orderItem: OrderItem, size: string): string {
+    return `${orderItem.id}.${size}.${orderItem.count}|`;
   }
 
   toModalAuthenticate() {

@@ -1,7 +1,9 @@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router, RouterLinkWithHref } from '@angular/router';
+import { Router } from '@angular/router';
 import { AccountService } from '../../../data/services/account.service';
 import { Component, OnInit } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
+
 import { CartService } from 'src/app/data/services/cart.service';
 import { AuthenticateModalComponent } from 'src/app/features/auth/authenticate-modal.component';
 
@@ -15,7 +17,8 @@ export class NavComponent implements OnInit {
     public accountService: AccountService,
     private router: Router,
     private modalService: NgbModal,
-    public cartService: CartService
+    public cartService: CartService,
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit(): void {}
@@ -31,10 +34,6 @@ export class NavComponent implements OnInit {
 
   toCart() {
     this.router.navigateByUrl('cart');
-  }
-
-  hRefTo() {
-    this.router.navigateByUrl('/#Beverages');
   }
 
   logout() {

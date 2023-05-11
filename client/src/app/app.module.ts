@@ -1,10 +1,11 @@
+import { CartComponent } from './features/cart/cart.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
-
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +17,6 @@ import { ProfileComponent } from './core/components/pages/profile/profile.compon
 import { OrdersComponent } from './core/components/pages/orders/orders.component';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { NotFoundComponent } from './core/components/errors/not-found/not-found.component';
-import { CartComponent } from './features/cart/pages/cart/cart.component';
 import { AuthenticateModalComponent } from './features/auth/authenticate-modal.component';
 import { ServerErrorComponent } from './core/components/errors/server-error/server-error.component';
 import { TestErrorsComponent } from './core/components/errors/test-errors/test-errors.component';
@@ -48,6 +48,7 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     FormsModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    NgxPageScrollModule,
     BsDropdownModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
