@@ -1,35 +1,57 @@
-<section class="row mb-5">
-  <article
-    *ngFor="let product of uniqueProducts"
-    class="col-sm-3 mb-5 me-0 mt-2 p-0"
-  >
+<section *ngIf="orderItems.length != 0; else emptyCart" class="row">
+  <article *ngFor="let item of orderItems" class="col-sm-3 mb-5 me-0 mt-2 p-0">
     <main style="height: 450px">
       <img
         class="rounded mx-auto d-block mt-3 mx-0"
-        src="{{ product.productSize.imageUrl }}"
+        src="{{ item.imageUrl }}"
         style="height: 292px; width: 292px"
       />
-      <p class="text-primary h5">{{ product.name }}</p>
-      <ng-container *ngIf="product.category == 'Other'; else productWeight">
-        <p *ngIf="product.productSize.size" class="text-muted d-inline">
-          {{ product.productSize.size }} size,
+      <p class="h3">{{ item.name }}</p>
+
+      <div *ngIf="item.size && item.size != 'WS'; else withoutSize">
+        <p class="text-muted d-inline h6">
+          {{ item.size }} size, {{ item.weight }} g.
         </p>
-        <p class="text-muted d-inline">{{ product.productSize.weight }} g.</p>
-      </ng-container>
-      <ng-template #productWeight>
-        <p *ngIf="product.productSize.size" class="text-muted d-inline">
-          {{ product.productSize.size }} size,
-        </p>
-        <p class="text-muted d-inline">
-          Traditional dough, {{ product.productSize.weight }} g.
-        </p>
+      </div>
+      <ng-template #withoutSize>
+        <p class="text-muted d-inline h6">{{ item.weight }} g.</p>
       </ng-template>
 
-      <div class="d-flex justify-content-between">
-        <p class="h4 text-black me-5 pe-5">
-          ${{ product.productSize.price }} US
+      <div class="d-flex justify-content-end">
+        <p class="h4 text-black pe-5">
+          ${{ (item.price * item.count).toFixed(2) }} US
         </p>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-default border-0"
+          (click)="increment(item)"
+        >
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </button>
+        <p class="px-3 pt-1 h5 font-weight-bold">{{ item.count }}</p>
+        <button
+          type="button"
+          class="btn btn-default border-0"
+          (click)="decrement(item)"
+        >
+          <i class="fa fa-minus-circle" aria-hidden="true"></i>
+        </button>
       </div>
     </main>
   </article>
+  <div class="d-flex flex-row justify-content-end">
+    <p class="h3">Total: ${{ getTotal() }} US</p>
+  </div>
 </section>
+
+<ng-template #emptyCart>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <p class="h2">Your cart is empty!</p>
+    <button type="button" class="btn btn-warning mt-3" (click)="goToHomePage()">
+      Go to home page!
+    </button>
+  </div>
+</ng-template>

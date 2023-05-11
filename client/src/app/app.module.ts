@@ -1,10 +1,9 @@
-import { ModalsComponent } from './features/products/productModal/modals.component';
-import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CookieService } from 'ngx-cookie-service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,12 +17,13 @@ import { OrdersComponent } from './core/components/pages/orders/orders.component
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { NotFoundComponent } from './core/components/errors/not-found/not-found.component';
 import { CartComponent } from './features/cart/pages/cart/cart.component';
-import { EmptyCartComponent } from './features/cart/pages/empty-cart/empty-cart.component';
-import { LoginModalComponent } from './features/auth/login-modal.component';
+import { AuthenticateModalComponent } from './features/auth/authenticate-modal.component';
 import { ServerErrorComponent } from './core/components/errors/server-error/server-error.component';
 import { TestErrorsComponent } from './core/components/errors/test-errors/test-errors.component';
 import { NavComponent } from './core/components/nav/nav.component';
 import { HomeComponent } from './core/components/home/home.component';
+import { ProductModalViewComponent } from './features/products/productModal/productModalView.component';
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,10 +36,9 @@ import { HomeComponent } from './core/components/home/home.component';
     TestErrorsComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    ModalsComponent,
+    ProductModalViewComponent,
     CartComponent,
-    LoginModalComponent,
-    EmptyCartComponent,
+    AuthenticateModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +65,7 @@ import { HomeComponent } from './core/components/home/home.component';
       multi: true,
     },
     NgbActiveModal,
+    [CookieService],
   ],
   bootstrap: [AppComponent],
 })

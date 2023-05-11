@@ -1,4 +1,5 @@
 ﻿using PizzaStore.Entities;
+using System.Collections.Generic;
 
 namespace PizzaStore.DTOs
 {
@@ -12,6 +13,6 @@ namespace PizzaStore.DTOs
 
         public string Description { get; set; }
 
-        public  ProductSizeDto ProductSize { get; set; }
+        public IEnumerable<ProductSizeDto> ProductSize { get; set; }
     }
 }

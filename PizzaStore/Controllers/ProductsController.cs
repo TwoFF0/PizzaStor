@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,7 +29,11 @@ namespace PizzaStore.Controllers
         {
             await foreach (var product in repository.GetAllProductsAsync())
             {
-                yield return mapper.Map<ProductDto>(product);
+                var productSizeDto = mapper.Map<IEnumerable<ProductSizeDto>>(product.ProductSizes);
+                var productDto = mapper.Map<ProductDto>(product);
+                productDto.ProductSize = productSizeDto;
+
+                yield return productDto;
             }
         }
 

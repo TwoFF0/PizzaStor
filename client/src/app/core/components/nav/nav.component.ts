@@ -1,9 +1,9 @@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { AccountService } from '../../../data/services/account.service';
 import { Component, OnInit } from '@angular/core';
 import { CartService } from 'src/app/data/services/cart.service';
-import { LoginModalComponent } from 'src/app/features/auth/login-modal.component';
+import { AuthenticateModalComponent } from 'src/app/features/auth/authenticate-modal.component';
 
 @Component({
   selector: 'app-nav',
@@ -20,8 +20,8 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toModal(registration: boolean) {
-    const modalRef = this.modalService.open(LoginModalComponent, {
+  toModalAuthenticate(registration: boolean) {
+    const modalRef = this.modalService.open(AuthenticateModalComponent, {
       centered: true,
       size: 'm',
     });
@@ -31,6 +31,10 @@ export class NavComponent implements OnInit {
 
   toCart() {
     this.router.navigateByUrl('cart');
+  }
+
+  hRefTo() {
+    this.router.navigateByUrl('/#Beverages');
   }
 
   logout() {

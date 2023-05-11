@@ -53,15 +53,15 @@
         {{ user.userName | titlecase }}
       </button>
 
-      <!-- <button
-        *ngIf="cartService.cartProducts.length > 0"
+      <button
+        *ngIf="cartService.orderItems.length > 0"
         class="btn btn-primary ms-3 me-5"
         (click)="toCart()"
         type="button"
       >
-        Checkout | {{ cartService.cartProducts.length }}
+        Checkout | {{ cartService.orderItems.length }}
         <i class="fa fa-shopping-basket" aria-hidden="true"></i>
-      </button> -->
+      </button>
 
       <div
         class="dropdown-menu"
@@ -90,27 +90,17 @@
       <button
         class="btn btn-primary me-3"
         type="button"
-        (click)="toModal(false)"
+        (click)="toModalAuthenticate(false)"
       >
-        Sign In
+        Log In
       </button>
       <button
         class="btn btn-primary ms-3 me-3"
         type="button"
-        (click)="toModal(true)"
+        (click)="toModalAuthenticate(true)"
       >
         Sign Up
       </button>
-
-      <!-- <button
-        *ngIf="cartService.cartProducts.length > 0"
-        class="btn btn-primary ms-3 me-5"
-        (click)="toCart()"
-        type="button"
-      >
-        Checkout | {{ cartService.cartProducts.length }}
-        <i class="fa fa-shopping-basket" aria-hidden="true"></i>
-      </button> -->
     </div>
   </div>
 </nav>

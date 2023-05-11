@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
 
+
 namespace PizzaStore.Data.Repositories
 {
     public class ProductRepository : IProductRepository
@@ -23,7 +24,7 @@ namespace PizzaStore.Data.Repositories
         public async IAsyncEnumerable<Product> GetProductsByCategoryAsync(string category)
         {
 
-            await foreach (var product in this.context.Products.Where(x => x.Category == category).Include(x => x.ProductSize).AsAsyncEnumerable())
+            await foreach (var product in this.context.Products.Where(x => x.Category == category).Include(x => x.ProductSizes).AsAsyncEnumerable())
             {
                 yield return product;
             }
@@ -31,7 +32,7 @@ namespace PizzaStore.Data.Repositories
 
         public async IAsyncEnumerable<Product> GetAllProductsAsync()
         {
-            await foreach (var product in this.context.Products.Include(x => x.ProductSize).AsAsyncEnumerable())
+            await foreach (var product in this.context.Products.Include(x => x.ProductSizes).AsAsyncEnumerable())
             {
                 yield return product;
             }

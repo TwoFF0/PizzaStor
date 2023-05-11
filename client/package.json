@@ -29,6 +29,7 @@
     "bootswatch": "^5.2.1",
     "font-awesome": "^4.7.0",
     "ngx-bootstrap": "^9.0.0",
+    "ngx-cookie-service": "^14.0.1",
     "ngx-toastr": "^15.0.0",
     "rxjs": "~7.5.0",
     "toastr": "^2.1.4",
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.1",
-    "@angular/cli": "~14.2.1",
+    "@angular/cli": "^15.2.7",
     "@angular/compiler-cli": "^14.0.0",
     "@types/jasmine": "~4.0.0",
     "jasmine-core": "~4.3.0",

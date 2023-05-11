@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using PizzaStore.Data;
 using PizzaStore.DTOs;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace PizzaStore.Controllers
 {
@@ -65,6 +70,8 @@ namespace PizzaStore.Controllers
 
             if (user.PasswordHash.Where((t, i) => t != computedHash[i]).Any())
                 return Unauthorized("Invalid password");
+
+            var token = _tokenService.CreateToken(user);
 
             return new AccountDto()
             {

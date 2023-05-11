@@ -4,5 +4,5 @@ export interface Product {
   category: string;
   name: string;
   description: string;
-  productSize: ProductSize;
+  productSize: ProductSize[];
 }

@@ -1,14 +1,14 @@
-import { AccountService } from './../../data/services/account.service';
-import { UserLogin } from './../../data/models/UserLogin';
+import { AccountService } from '../../data/services/account.service';
+import { UserLogin } from '../../data/models/UserLogin';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-login-modal',
-  templateUrl: './login-modal.component.html',
-  styleUrls: ['./login-modal.component.css'],
+  selector: 'app-authenticate-modal',
+  templateUrl: './authenticate-modal.component.html',
+  styleUrls: ['./authenticate-modal.component.css'],
 })
-export class LoginModalComponent implements OnInit {
+export class AuthenticateModalComponent implements OnInit {
   entity = {} as UserLogin;
   registration: boolean;
 
@@ -22,7 +22,7 @@ export class LoginModalComponent implements OnInit {
   login() {
     this.accountService.login(this.entity).subscribe((_) => {
       this.activeModal.dismiss();
-      this.reloadPage();
+      // this.reloadPage();
     });
   }
 

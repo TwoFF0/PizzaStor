@@ -4,7 +4,7 @@
       <img
         class="rounded mx-auto d-block m-0 ps-4"
         id="modal_image"
-        src="{{ selectedProduct.productSize.imageUrl }}"
+        src="{{ selectedSize.imageUrl }}"
         alt="image"
       />
     </div>
@@ -18,18 +18,18 @@
           (click)="activeModal.dismiss('Cross click')"
         ></button>
       </div>
-      <ng-container *ngIf="selectedProduct.category != 'Other'; else products">
+      <ng-container
+        *ngIf="selectedProduct.category != 'Other'; else NotProducts"
+      >
         <p class="h6 text-muted my-3">
-          Traditional dough, {{ selectedProduct.productSize.weight }} g.
+          Traditional dough, {{ selectedSize.weight }} g.
         </p>
       </ng-container>
-      <ng-template #products
-        ><p class="h6 text-muted my-3">
-          {{ selectedProduct.productSize.weight }} g.
-        </p>
+      <ng-template #NotProducts
+        ><p class="h6 text-muted my-3">{{ selectedSize.weight }} g.</p>
       </ng-template>
       <p class="h6 text-muted my-3">{{ selectedProduct.description }}</p>
-      <ng-container *ngIf="selectedProduct.productSize.size">
+      <ng-container *ngIf="selectedSize.size">
         <div
           class="btn-group my-3"
           role="group"
@@ -72,8 +72,14 @@
         class="d-flex flex-row flex-wrap justify-content-between align-items-center mb-3"
         style="position: absolute; bottom: 0px"
       >
-        <p class="h3">${{ selectedProduct.productSize.price }}</p>
-        <!-- <button class="btn btn-primary mb-1" (click)="ToCart()">To Cart</button> -->
+        <p class="h3">${{ selectedSize.price }}</p>
+
+        <button
+          class="btn btn-primary mb-1"
+          (click)="ToCart(selectedProduct, selectedSize)"
+        >
+          To Cart
+        </button>
       </div>
     </div>
   </div>

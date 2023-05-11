@@ -6,12 +6,13 @@ import { ProfileComponent } from './core/components/pages/profile/profile.compon
 import { AboutComponent } from './core/components/pages/about/about.component';
 import { HomeComponent } from './core/components/home/home.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { TestErrorsComponent } from './core/components/errors/test-errors/test-errors.component';
 import { ServerErrorComponent } from './core/components/errors/server-error/server-error.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: '#Beverages', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'errors', component: TestErrorsComponent },
   { path: 'not-found', component: NotFoundComponent },
@@ -29,8 +30,13 @@ const routes: Routes = [
   { path: '**', component: HomeComponent, pathMatch: 'full' },
 ];
 
+const routerOptions: ExtraOptions = {
+  useHash: false,
+  anchorScrolling: 'enabled',
+};
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, routerOptions)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

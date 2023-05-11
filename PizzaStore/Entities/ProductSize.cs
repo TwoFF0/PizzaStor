@@ -17,7 +17,7 @@ namespace PizzaStore.Entities
         [Required]
         public string ImageUrl { get; set; }
 
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
         public int ProductId { get; set; }
     }

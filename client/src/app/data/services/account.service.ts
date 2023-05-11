@@ -62,6 +62,7 @@ export class AccountService {
 
   logout() {
     this.localStorageService.deleteItem('user');
+    this.localStorageService.deleteItem('cart');
     this.currentUserSource.next(null!);
   }
 }

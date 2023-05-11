@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaStore.Entities
 {
@@ -15,7 +16,7 @@ namespace PizzaStore.Entities
         [Required]
         public string Description { get; set; }
 
-        public ProductSize ProductSize { get; set; }
+        public virtual IEnumerable<ProductSize> ProductSizes { get; set; }
 
     }
 }
