@@ -1,23 +1,9 @@
-fix prices DONE
-modal+description DONE
-modal(image scale) grammovki; DONE
-modal+login DONE
-
-===
-!==
-
-gitignore cs file and todo
-
 logo
 nav bar + id
 
-cart
 profile
-orders
 
 balance
 orders field
 
-
-slider
 auth + mail
