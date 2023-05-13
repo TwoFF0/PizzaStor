@@ -10,22 +10,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using PizzaStore.Data;
-using PizzaStore.DTOs;
+using PizzaStore.DTOs.Users;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces;
+using PizzaStore.Interfaces.Repositories;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace PizzaStore.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly DataContext _dataContext;
+        private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
-        public AccountController(DataContext dataContext, ITokenService tokenService)
+        public AccountController(IUserRepository _userRepository, ITokenService tokenService)
         {
-            _dataContext = dataContext;
-            _tokenService = tokenService;
+            this._tokenService = tokenService;
+            this._userRepository = _userRepository;
         }
 
         [HttpPost("register")]
@@ -46,8 +47,7 @@ namespace PizzaStore.Controllers
                 PasswordSalt = hmac.Key
             };
 
-            await _dataContext.Users.AddAsync(user);
-            await _dataContext.SaveChangesAsync();
+            await _userRepository.PostUserAsync(user);
 
             return new AccountDto()
             {
@@ -59,7 +59,7 @@ namespace PizzaStore.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AccountDto>> Login(LoginDto loginDto)
         {
-            var user = await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
+            var user = await _userRepository.GetUserByUserNameAsync(loginDto.UserName);
 
             if (user is null)
                 return Unauthorized("Invalid username");
@@ -70,7 +70,7 @@ namespace PizzaStore.Controllers
 
             if (user.PasswordHash.Where((t, i) => t != computedHash[i]).Any())
                 return Unauthorized("Invalid password");
-
+            
             var token = _tokenService.CreateToken(user);
 
             return new AccountDto()
@@ -80,6 +80,6 @@ namespace PizzaStore.Controllers
             };
         }
 
-        private async Task<bool> UserExist(string userName) => await _dataContext.Users.AnyAsync(x => x.UserName == userName.ToLower());
+        private async Task<bool> UserExist(string userName) => await _userRepository.GetUserByUserNameAsync(userName) != null;
     }
 }

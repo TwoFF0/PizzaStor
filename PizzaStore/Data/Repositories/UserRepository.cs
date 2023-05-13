@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
@@ -24,6 +25,7 @@ namespace PizzaStore.Data.Repositories
             }
         }
 
+        [Authorize]
         public async Task<User> GetUserByIdAsync(int id) => await this.context.Users.FindAsync(id);
 
         public async Task<User> GetUserByUserNameAsync(string username) =>
@@ -31,6 +33,8 @@ namespace PizzaStore.Data.Repositories
 
         public async Task<User> PostUserAsync(User user)
         {
+            user.CreatedAt = DateTime.UtcNow;
+
             var toReturn = await this.context.Users.AddAsync(user);
             await this.context.SaveChangesAsync();
 
@@ -47,6 +51,33 @@ namespace PizzaStore.Data.Repositories
             }
 
             context.Users.Remove(user);
+            return true;
+        }
+
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            if (user is null)
+            {
+                return false;
+            }
+
+            var dbUser = await context.Users.FindAsync(user.Id);
+
+            if (dbUser is null)
+            {
+                return false;
+            }
+
+            dbUser.Age = user.Age;
+            dbUser.UserName = user.UserName;
+            dbUser.FirstName = user.FirstName;
+            dbUser.LastName = user.LastName;
+            dbUser.City = user.City;
+            dbUser.Country = user.Country;
+            dbUser.Balance = user.Balance;
+
+            await this.context.SaveChangesAsync();
+
             return true;
         }
     }

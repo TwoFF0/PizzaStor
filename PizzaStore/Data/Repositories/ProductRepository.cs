@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +30,8 @@ namespace PizzaStore.Data.Repositories
 
         public async IAsyncEnumerable<Product> GetAllProductsAsync()
         {
+
+
             await foreach (var product in this.context.Products.Include(x => x.ProductSizes).AsAsyncEnumerable())
             {
                 yield return product;

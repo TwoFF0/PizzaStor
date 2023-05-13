@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace PizzaStore.Entities
+namespace PizzaStore.DTOs.Users
 {
-    public class User
+    public class UserDto
     {
         public int Id { get; set; }
 
@@ -15,20 +14,10 @@ namespace PizzaStore.Entities
 
         public string LastName { get; set; }
 
-        public byte[] PasswordHash { get; set; }
-
-        public byte[] PasswordSalt { get; set; }
-
         public string City { get; set; }
 
         public string Country { get; set; }
 
         public double Balance { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime LastActive { get; set; }
-
-        public virtual IEnumerable<Order> Orders { get; set; }
     }
 }

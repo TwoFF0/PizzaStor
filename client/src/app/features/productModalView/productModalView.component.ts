@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { OrderItem } from 'src/app/data/models/OrderItem';
-import { Product } from 'src/app/data/models/Product';
-import { ProductSize } from 'src/app/data/models/ProductSize';
+import { CartItem } from 'src/app/data/models/Cart/CartItem';
+import { Product } from 'src/app/data/models/Product/Product';
+import { ProductSize } from 'src/app/data/models/Product/ProductSize';
 import { CartService } from 'src/app/data/services/cart.service';
 
 @Component({
@@ -60,8 +60,9 @@ export class ProductModalViewComponent implements OnInit {
       (x) => x.id == productSize.id
     )!;
 
-    let orderItem: OrderItem = {
-      id: selectedProduct.id,
+    let cartItem: CartItem = {
+      productId: selectedProduct.id,
+      productSizeId: selectedSize.id,
       name: selectedProduct.name,
       size: selectedSize.size,
       price: selectedSize.price,
@@ -70,7 +71,7 @@ export class ProductModalViewComponent implements OnInit {
       count: 1,
     };
 
-    this.cartService.addToCart(orderItem);
+    this.cartService.addToCart(cartItem);
     this.activeModal.dismiss();
   }
 }

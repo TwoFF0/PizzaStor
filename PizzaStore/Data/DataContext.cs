@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PizzaStore.Entities;
+using PizzaStore.Extensions;
 
 namespace PizzaStore.Data
 {
@@ -12,5 +13,16 @@ namespace PizzaStore.Data
         public DbSet<Product> Products { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ConfigureUser();
+            modelBuilder.ConfigureOrder();
+            modelBuilder.ConfigureOrderDetail();
+            modelBuilder.ConfigureProduct();
+            modelBuilder.ConfigureProductSize();
+        }
     }
 }

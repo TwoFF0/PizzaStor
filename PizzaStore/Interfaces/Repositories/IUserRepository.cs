@@ -14,6 +14,8 @@ namespace PizzaStore.Interfaces.Repositories
 
         public Task<User> PostUserAsync(User user);
 
+        public Task<bool> UpdateUserAsync(User user);
+
         public Task<bool> DeleteUserAsync(int id);
     }
 }

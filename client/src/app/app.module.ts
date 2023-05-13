@@ -1,3 +1,4 @@
+import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 import { CartComponent } from './features/cart/cart.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -22,7 +23,6 @@ import { ServerErrorComponent } from './core/components/errors/server-error/serv
 import { TestErrorsComponent } from './core/components/errors/test-errors/test-errors.component';
 import { NavComponent } from './core/components/nav/nav.component';
 import { HomeComponent } from './core/components/home/home.component';
-import { ProductModalViewComponent } from './features/products/productModal/productModalView.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 @NgModule({

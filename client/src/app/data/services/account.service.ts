@@ -1,10 +1,10 @@
-import { UserAuth } from './../models/UserAuth';
 import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserAuth } from '../models/User/UserAuth';
 
 @Injectable({
   providedIn: 'root',
@@ -64,5 +64,21 @@ export class AccountService {
     this.localStorageService.deleteItem('user');
     this.localStorageService.deleteItem('cart');
     this.currentUserSource.next(null!);
+  }
+
+  get userName() {
+    let userName: string = '';
+
+    let user$ = this.currentUser$;
+
+    if (!user$) {
+      throw new Error('User is null');
+    }
+
+    user$.subscribe((user) => {
+      userName = user.userName;
+    });
+
+    return userName;
   }
 }

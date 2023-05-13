@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PizzaStore.DTOs
+namespace PizzaStore.DTOs.Users
 {
     public class AccountDto
     {

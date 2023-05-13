@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,9 +43,10 @@ namespace PizzaStore
             });
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
-            services.AddDistributedMemoryCache();
+            //services.AddDistributedMemoryCache();
 
             services.AddControllers();
             services.AddCors();
@@ -73,7 +75,6 @@ namespace PizzaStore
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
-
 
             // app.UseHttpsRedirection();
 

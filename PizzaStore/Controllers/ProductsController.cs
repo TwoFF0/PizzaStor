@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PizzaStore.DTOs;
+using PizzaStore.DTOs.Products;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
 
 namespace PizzaStore.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         private readonly IProductRepository repository;
         private readonly IMapper mapper;
@@ -29,11 +28,7 @@ namespace PizzaStore.Controllers
         {
             await foreach (var product in repository.GetAllProductsAsync())
             {
-                var productSizeDto = mapper.Map<IEnumerable<ProductSizeDto>>(product.ProductSizes);
-                var productDto = mapper.Map<ProductDto>(product);
-                productDto.ProductSize = productSizeDto;
-
-                yield return productDto;
+                yield return mapper.Map<ProductDto>(product);
             }
         }
 

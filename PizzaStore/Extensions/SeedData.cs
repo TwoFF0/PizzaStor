@@ -140,6 +140,7 @@ namespace PizzaStore.Extensions
                                     .RuleFor(x => x.LastName, f => f.Name.LastName())
                                     .RuleFor(x => x.CreatedAt, f => f.Date.Past(5))
                                     .RuleFor(x => x.LastActive, f => f.Date.Past(5))
+                                    .RuleFor(x => x.Balance, f => Math.Round(f.Random.Double(5, 150), 2))
                                     .RuleFor(x => x.PasswordHash, f => passwordHash)
                                     .RuleFor(x => x.PasswordSalt, f => passSalt));
                 }

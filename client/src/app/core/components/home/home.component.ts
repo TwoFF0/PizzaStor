@@ -1,10 +1,9 @@
-import { Product } from '../../../data/models/Product';
 import { Component, OnInit } from '@angular/core';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProductSize } from 'src/app/data/models/ProductSize';
+import { Product } from 'src/app/data/models/Product/Product';
+import { ProductSize } from 'src/app/data/models/Product/ProductSize';
 import { ProductService } from 'src/app/data/services/product.service';
-import { ProductModalViewComponent } from 'src/app/features/products/productModal/productModalView.component';
+import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 
 @Component({
   selector: 'app-home',

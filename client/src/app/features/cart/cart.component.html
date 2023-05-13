@@ -1,14 +1,14 @@
-<section *ngIf="orderItems.length != 0; else emptyCart" class="row">
-  <article *ngFor="let item of orderItems" class="col-sm-3 mb-5 me-0 mt-2 p-0">
+<section *ngIf="cartItems.length != 0; else emptyCart" class="row">
+  <article *ngFor="let item of cartItems" class="col-sm-3 mb-5 me-0 mt-2 p-0">
     <main style="height: 450px">
       <img
         class="rounded mx-auto d-block mt-3 mx-0"
         src="{{ item.imageUrl }}"
         style="height: 292px; width: 292px"
       />
-      <p class="h3">{{ item.name }}</p>
+      <p class="h4">{{ item.name }}</p>
 
-      <div *ngIf="item.size && item.size != 'WS'; else withoutSize">
+      <div *ngIf="item.size && item.size != '-'; else withoutSize">
         <p class="text-muted d-inline h6">
           {{ item.size }} size, {{ item.weight }} g.
         </p>
@@ -42,16 +42,23 @@
       </div>
     </main>
   </article>
-  <div class="d-flex flex-row justify-content-end">
-    <p class="h3">Total: ${{ total }} US</p>
+  <div class="d-flex flex-row justify-content-end gap-3">
+    <p class="h3 m-0">Total: ${{ total }} US</p>
+    <button class="btn btn-primary rounded-pill" (click)="makeAnOrder()">
+      <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+      Make an Order
+    </button>
   </div>
 </section>
 
 <ng-template #emptyCart>
   <div class="d-flex flex-column justify-content-center align-items-center">
     <p class="h2">Your cart is empty!</p>
-    <button type="button" class="btn btn-warning mt-3" (click)="goToHomePage()">
-      Go to home page!
+    <button
+      class="btn btn-warning fw-bold text-uppercase mt-3"
+      (click)="goToHomePage()"
+    >
+      <i class="fa fa-home" aria-hidden="true"></i> Go to Home Page
     </button>
   </div>
 </ng-template>

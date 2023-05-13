@@ -74,17 +74,16 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-        Welcome
-        {{ user.userName | titlecase }}
+        Welcome {{ user.userName | titlecase }}
       </button>
 
       <button
-        *ngIf="cartService.orderItems.length > 0"
+        *ngIf="cartItemsCount > 0"
         class="btn btn-primary ms-3 me-5"
         (click)="toCart()"
         type="button"
       >
-        Checkout | {{ cartService.orderItems.length }}
+        Checkout | {{ cartItemsCount }}
         <i class="fa fa-shopping-basket" aria-hidden="true"></i>
       </button>
 
@@ -113,17 +112,19 @@
       *ngIf="!(accountService.currentUser$ | async)"
     >
       <button
-        class="btn btn-primary me-3"
+        class="btn btn-primary rounded-pill shadow-sm me-3"
         type="button"
         (click)="toModalAuthenticate(false)"
       >
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
         Log In
       </button>
       <button
-        class="btn btn-primary ms-3 me-3"
+        class="btn btn-primary rounded-pill shadow-sm ms-3 me-3"
         type="button"
         (click)="toModalAuthenticate(true)"
       >
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
         Sign Up
       </button>
     </div>

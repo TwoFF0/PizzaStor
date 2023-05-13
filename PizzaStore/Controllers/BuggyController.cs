@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PizzaStore.Data;
-using PizzaStore.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace PizzaStore.Controllers

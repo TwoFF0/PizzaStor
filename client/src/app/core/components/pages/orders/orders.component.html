@@ -1,1 +1,53 @@
-<p>orders works!</p>
+<div class="container mt-5" *ngIf="orders.length !== 0; else emptyOrders">
+  <h1 class="text-center mb-4">Order Details</h1>
+  <div class="card mb-4" *ngFor="let order of orders">
+    <div class="card-body">
+      <h5 class="card-title">Order Date: {{ order.orderDate }}</h5>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Name</th>
+              <th scope="col">Size</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Price</th>
+              <th scope="col">Count</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of order.orderDetails">
+              <td class="text-center">
+                <img
+                  src="{{ item.imageUrl }}"
+                  alt="{{ item.name }}"
+                  style="width: 100px; height: 100px"
+                />
+              </td>
+              <td class="h5">{{ item.name }}</td>
+              <td class="h5">{{ item.size }}</td>
+              <td class="h5">{{ item.weight }} g</td>
+              <td class="h5">${{ item.price }}</td>
+              <td class="h5">{{ item.count }}</td>
+              <td class="h5">${{ (item.price * item.count).toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="text-end">Total Price: ${{ order.totalPrice.toFixed(2) }}</h4>
+    </div>
+  </div>
+</div>
+<ng-template #emptyOrders>
+  <div class="container text-center mt-5">
+    <h1>No Orders Found</h1>
+    <p>You haven't placed any orders yet.</p>
+    <button
+      class="btn btn-warning fw-bold text-uppercase"
+      (click)="goToHomePage()"
+    >
+      <i class="fa fa-home" aria-hidden="true"></i> Go to Home Page
+    </button>
+  </div>
+</ng-template>

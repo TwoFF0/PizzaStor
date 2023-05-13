@@ -8,13 +8,10 @@ namespace PizzaStore.Entities
 
         public string Size { get; set; }
 
-        [Required]
         public double Price { get; set; }
 
-        [Required]
         public int Weight { get; set; }
 
-        [Required]
         public string ImageUrl { get; set; }
 
         public virtual Product Product { get; set; }

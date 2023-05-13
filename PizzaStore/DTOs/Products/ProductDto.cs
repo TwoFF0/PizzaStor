@@ -1,7 +1,7 @@
 ﻿using PizzaStore.Entities;
 using System.Collections.Generic;
 
-namespace PizzaStore.DTOs
+namespace PizzaStore.DTOs.Products
 {
     public class ProductDto
     {

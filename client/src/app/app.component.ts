@@ -1,8 +1,8 @@
 import { AccountService } from './data/services/account.service';
 import { Component, OnInit } from '@angular/core';
-import { UserAuth } from './data/models/UserAuth';
 import { environment } from 'src/environments/environment';
 import { CartService } from './data/services/cart.service';
+import { UserAuth } from './data/models/User/UserAuth';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +29,6 @@ export class AppComponent implements OnInit {
 
   setCart() {
     const plainCart: string = localStorage.getItem('cart')!;
-    this.cartService.setOrderItems(plainCart);
+    this.cartService.setCartItems(plainCart);
   }
 }

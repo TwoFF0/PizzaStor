@@ -1,3 +1,5 @@
+import { Order } from "../Cart/Order";
+
 export interface User {
   id: number;
   firstName: string;
@@ -6,5 +8,6 @@ export interface User {
   age: number;
   city: string;
   country: string;
-  createdAt: Date;
+  balance: number;
+  orders: Order[];
 }

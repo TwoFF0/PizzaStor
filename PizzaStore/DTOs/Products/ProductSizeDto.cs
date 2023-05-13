@@ -1,4 +1,4 @@
-﻿namespace PizzaStore.DTOs
+﻿namespace PizzaStore.DTOs.Products
 {
     public class ProductSizeDto
     {

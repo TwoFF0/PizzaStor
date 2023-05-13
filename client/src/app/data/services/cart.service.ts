@@ -2,10 +2,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Injectable } from '@angular/core';
 import { AuthenticateModalComponent } from 'src/app/features/auth/authenticate-modal.component';
 import { ToastrService } from 'ngx-toastr';
-import { OrderItem } from '../models/OrderItem';
+import { CartItem } from '../models/Cart/CartItem';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { Product } from '../models/Product';
 import { ProductService } from './product.service';
+import { HttpClient } from '@angular/common/http';
+import { Product } from '../models/Product/Product';
 
 @Injectable({
   providedIn: 'root',
@@ -19,10 +20,16 @@ export class CartService {
   ) {}
 
   products: Product[];
-  orderItems: OrderItem[] = [];
-  plainOrder: string;
+  cartItems: CartItem[] = [];
+  plainCart: string;
 
-  addToCart(itemToAdd: OrderItem) {
+  get total(): number {
+    return +this.cartItems
+      .reduce((acc, item) => acc + item.price * item.count, 0)
+      .toFixed(2);
+  }
+
+  addToCart(itemToAdd: CartItem) {
     if (!this.isUserLoggedIn()) {
       this.showLoginPrompt();
       return;
@@ -33,33 +40,33 @@ export class CartService {
     }
 
     const cart = this.storage.getItem('cart') || '';
-    const size = itemToAdd.size || 'WS';
-    const orderItemString = this.createOrderItemString(itemToAdd, size);
+    const size = itemToAdd.size || '-';
+    const cartItemString = this.createCartItemString(itemToAdd, size);
 
-    this.fillOrderItems(itemToAdd);
+    this.fillCartItems(itemToAdd);
 
-    if (cart.includes(orderItemString)) {
+    if (cart.includes(cartItemString)) {
       this.changeCount(itemToAdd, true);
       return;
     }
 
-    this.storage.addItem('cart', cart + orderItemString);
+    this.storage.addItem('cart', cart + cartItemString);
   }
 
-  fillOrderItems(itemToAdd: OrderItem) {
+  fillCartItems(itemToAdd: CartItem) {
     const { name, size } = itemToAdd;
-    const existingItem = this.orderItems.find(
+    const existingItem = this.cartItems.find(
       (x) => x.name === name && x.size === size
     );
 
     if (existingItem) {
       existingItem.count++;
     } else {
-      this.orderItems.push(itemToAdd);
+      this.cartItems.push(itemToAdd);
     }
   }
 
-  async setOrderItems(plainCart: string) {
+  async setCartItems(plainCart: string) {
     if (!plainCart) {
       return;
     }
@@ -79,17 +86,18 @@ export class CartService {
         continue;
       }
 
-      const orderItem: OrderItem = {
-        id: product.id,
+      const cartItem: CartItem = {
+        productId: product.id,
+        productSizeId: productSize.id,
         name: product.name,
-        size: productSize.size || 'WS',
+        size: productSize.size || '-',
         price: productSize.price,
         weight: productSize.weight,
         imageUrl: productSize.imageUrl,
         count: +count,
       };
 
-      this.fillOrderItems(orderItem);
+      this.fillCartItems(cartItem);
     }
   }
 
@@ -97,17 +105,17 @@ export class CartService {
     this.products = await this.productService.getProducts();
   }
 
-  changeCount(orderItem: OrderItem, increment: boolean) {
+  changeCount(cartItem: CartItem, increment: boolean) {
     const cart = this.storage.getItem('cart');
     if (!cart) {
       throw new Error('Cart is empty.');
     }
 
-    const searchStr = `${orderItem.id}.${orderItem.size}.`;
+    const searchStr = `${cartItem.productId}.${cartItem.size}.`;
     const regex = new RegExp(`${searchStr}(\\d+)\\|`);
     const match = cart.match(regex);
     if (!match) {
-      throw new Error('Order item not found in cart.');
+      throw new Error('Cart item not found in cart.');
     }
 
     const count = parseInt(match[1]);
@@ -133,8 +141,8 @@ export class CartService {
     this.toModalAuthenticate();
   }
 
-  createOrderItemString(orderItem: OrderItem, size: string): string {
-    return `${orderItem.id}.${size}.${orderItem.count}|`;
+  createCartItemString(cartItem: CartItem, size: string): string {
+    return `${cartItem.productId}.${size}.${cartItem.count}|`;
   }
 
   toModalAuthenticate() {

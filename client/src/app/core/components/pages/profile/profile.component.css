@@ -1,0 +1,89 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa;
+}
+
+.container {
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.my-4 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group input {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.btn {
+  border-radius: 5px;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+}
+
+.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: #2e9508;
+  border-color: #59a04c;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #44e757;
+  border-color: #00b368;
+  color: #fff;
+}

@@ -1,5 +1,5 @@
 import { AccountService } from '../../data/services/account.service';
-import { UserLogin } from '../../data/models/UserLogin';
+import { UserLogin } from '../../data/models/User/UserLogin';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 

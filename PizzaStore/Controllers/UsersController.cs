@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaStore.Data;
-using PizzaStore.DTOs;
+using PizzaStore.DTOs.Users;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
 
@@ -32,8 +32,8 @@ namespace PizzaStore.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<UserDto>> GetUser(int id) => mapper.Map<UserDto>(await userRepository.GetUserByIdAsync(id));
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id) => mapper.Map<UserDto>(await userRepository.GetUserByIdAsync(id));
 
         [HttpGet("{username}")]
         public async Task<ActionResult<UserDto>> GetUser(string username) => mapper.Map<UserDto>(await userRepository.GetUserByUserNameAsync(username));
@@ -43,10 +43,21 @@ namespace PizzaStore.Controllers
         {
             if (user is null)
             {
-                return BadRequest("Empty user");
+                return BadRequest("User is null");
             }
 
             return mapper.Map<UserDto>(await this.userRepository.PostUserAsync(user));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> UpdateUser(UserDto userDto)
+        {
+            if (userDto is null)
+            {
+                return BadRequest("User is null");
+            }
+
+            return await this.userRepository.UpdateUserAsync(mapper.Map<User>(userDto));
         }
 
         [HttpDelete]
