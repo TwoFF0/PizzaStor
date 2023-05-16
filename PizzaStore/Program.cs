@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PizzaStore.Data;
 using PizzaStore.Extensions;
+using Microsoft.AspNetCore.Identity;
+using PizzaStore.Entities;
 
 namespace PizzaStore
 {
@@ -17,7 +19,6 @@ namespace PizzaStore
     {
         public static async Task Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
             var host = CreateHostBuilder(args).Build();
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
@@ -25,9 +26,10 @@ namespace PizzaStore
             try
             {
                 var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                 await context.Database.MigrateAsync();
-                SeedData.GenerateSeedData(context, 50);
-
+                await SeedData.GenerateSeedData(context, userManager, roleManager, 50);
             }
             catch (Exception e)
             {

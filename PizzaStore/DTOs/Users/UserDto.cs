@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaStore.DTOs.Users
 {
@@ -6,6 +7,7 @@ namespace PizzaStore.DTOs.Users
     {
         public int Id { get; set; }
 
+        [Range(0, 99)]
         public int Age { get; set; }
 
         public string UserName { get; set; }

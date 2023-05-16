@@ -3,7 +3,7 @@ import { CartComponent } from './features/cart/cart.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
@@ -24,6 +24,9 @@ import { TestErrorsComponent } from './core/components/errors/test-errors/test-e
 import { NavComponent } from './core/components/nav/nav.component';
 import { HomeComponent } from './core/components/home/home.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { AdminComponent } from './core/components/pages/admin/admin.component';
+import { HasRoleDirective } from './core/directives/has-role.directive';
+import { EditRolesComponent } from './features/editRolesModal/edit-roles/edit-roles.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,9 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     ProductModalViewComponent,
     CartComponent,
     AuthenticateModalComponent,
+    AdminComponent,
+    HasRoleDirective,
+    EditRolesComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +52,7 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     HttpClientModule,
     NgbModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
     NgxPageScrollModule,

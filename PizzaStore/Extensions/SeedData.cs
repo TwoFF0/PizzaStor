@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using Bogus;
 using PizzaStore.Data;
 using PizzaStore.Entities;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace PizzaStore.Extensions
 {
@@ -15,7 +15,7 @@ namespace PizzaStore.Extensions
     /// </summary>
     public static class SeedData
     {
-        public static void GenerateSeedData(DataContext context, int itemCount)
+        public async static Task GenerateSeedData(DataContext context, UserManager<User> userManager, RoleManager<AppRole> roleManager, int itemCount)
         {
             if (context is null)
             {
@@ -65,6 +65,7 @@ namespace PizzaStore.Extensions
 
             if (!context.Products.Any())
             {
+
                 for (int i = 0; i < itemCount; i++)
                 {
                     var listOfSizes = new List<ProductSize>();
@@ -91,8 +92,8 @@ namespace PizzaStore.Extensions
                     var temp = templateProduct.Generate();
                     temp.ProductSizes = listOfSizes;
 
-                    context.Products.Add(temp);
-                    context.SaveChanges();
+                    await context.Products.AddAsync(temp);
+                    await context.SaveChangesAsync();
                 }
 
                 for (int i = 0; i < 10; i++)
@@ -116,23 +117,29 @@ namespace PizzaStore.Extensions
 
                     product.RuleFor(x => x.ProductSizes, x => listOfSizes);
 
-                    context.Products.Add(product);
-
-                    context.SaveChanges();
+                    await context.Products.AddAsync(product);
+                    await context.SaveChangesAsync();
                 }
+
             }
 
-
-            if (!context.Users.Any())
+            if (!userManager.Users.Any())
             {
+
+               var roles = new List<AppRole>(){
+                    new AppRole{Name = "Admin"},
+                    new AppRole{Name = "Member"},
+               };
+
+                foreach (var role in roles)
+                {
+                    await roleManager.CreateAsync(role);
+                }
+
                 for (int i = 0; i < itemCount; i++)
                 {
-                    using var hmac = new HMACSHA512();
-                    var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("password"));
-                    var passSalt = hmac.Key;
-
-                    context.Users.Add(new Faker<User>("en")
-                                    .RuleFor(x => x.Age, f => f.Random.Number(14, 99))
+                    var user = new Faker<User>("en")
+                                    .RuleFor(x => x.Age, f => f.Random.Number(14, 80))
                                     .RuleFor(x => x.UserName, f => f.Person.UserName.ToLower())
                                     .RuleFor(x => x.City, f => f.Address.City())
                                     .RuleFor(x => x.Country, f => f.Address.Country())
@@ -141,13 +148,21 @@ namespace PizzaStore.Extensions
                                     .RuleFor(x => x.CreatedAt, f => f.Date.Past(5))
                                     .RuleFor(x => x.LastActive, f => f.Date.Past(5))
                                     .RuleFor(x => x.Balance, f => Math.Round(f.Random.Double(5, 150), 2))
-                                    .RuleFor(x => x.PasswordHash, f => passwordHash)
-                                    .RuleFor(x => x.PasswordSalt, f => passSalt));
+                                    .Generate();
+
+                    await userManager.CreateAsync(user, "password");
+                    await userManager.AddToRoleAsync(user, "Member");
                 }
 
-                context.SaveChanges();
+                var admin = new User
+                {
+                    UserName = "admin",
+                };
+
+                await userManager.CreateAsync(admin, "strongPassword");
+                await userManager.AddToRoleAsync(admin, "Admin");
+
             }
         }
     }
-
 }

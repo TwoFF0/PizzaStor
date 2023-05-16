@@ -8,7 +8,7 @@ namespace PizzaStore.DTOs.Users
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(8, MinimumLength = 4)]
+        [StringLength(30, MinimumLength = 6)]
         public string Password { get; set; }
     }
 }

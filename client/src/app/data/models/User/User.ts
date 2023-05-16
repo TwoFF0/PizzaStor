@@ -1,4 +1,4 @@
-import { Order } from "../Cart/Order";
+import { Order } from '../Cart/Order';
 
 export interface User {
   id: number;
@@ -10,4 +10,5 @@ export interface User {
   country: string;
   balance: number;
   orders: Order[];
+  roles: string[]
 }

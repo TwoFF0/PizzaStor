@@ -1,32 +1,27 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using PizzaStore.Data;
 using PizzaStore.DTOs.Users;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces;
 using PizzaStore.Interfaces.Repositories;
-using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace PizzaStore.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
         private readonly ITokenService _tokenService;
 
-        public AccountController(IUserRepository _userRepository, ITokenService tokenService)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,ITokenService tokenService)
         {
             this._tokenService = tokenService;
-            this._userRepository = _userRepository;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [HttpPost("register")]
@@ -38,48 +33,43 @@ namespace PizzaStore.Controllers
             if (await UserExist(registerDto.UserName))
                 return BadRequest("This username is taken");
 
-            using var hmac = new HMACSHA512();
-
             var user = new User()
             {
                 UserName = registerDto.UserName.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
             };
 
-            await _userRepository.PostUserAsync(user);
+            var result = await userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            var roleResult = await userManager.AddToRoleAsync(user, "Member");
+            if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
 
             return new AccountDto()
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AccountDto>> Login(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByUserNameAsync(loginDto.UserName);
+            var user = await userManager.FindByNameAsync(loginDto.UserName);
 
             if (user is null)
                 return Unauthorized("Invalid username");
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-            if (user.PasswordHash.Where((t, i) => t != computedHash[i]).Any())
-                return Unauthorized("Invalid password");
-            
-            var token = _tokenService.CreateToken(user);
+            if (!result.Succeeded) return Unauthorized();
 
             return new AccountDto()
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
-        private async Task<bool> UserExist(string userName) => await _userRepository.GetUserByUserNameAsync(userName) != null;
+        private async Task<bool> UserExist(string userName) => await userManager.Users.AnyAsync(x => x.UserName == userName.ToLower());
     }
 }

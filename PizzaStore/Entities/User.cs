@@ -1,23 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace PizzaStore.Entities
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
-
         public int Age { get; set; }
-
-        public string UserName { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public byte[] PasswordHash { get; set; }
-
-        public byte[] PasswordSalt { get; set; }
 
         public string City { get; set; }
 
@@ -30,5 +23,7 @@ namespace PizzaStore.Entities
         public DateTime LastActive { get; set; }
 
         public virtual IEnumerable<Order> Orders { get; set; }
+
+        public virtual IEnumerable<AppUserRole> UserRoles { get; set; }
     }
 }

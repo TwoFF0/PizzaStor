@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PizzaStore.Entities;
 
 namespace PizzaStore.Extensions
@@ -43,15 +44,30 @@ namespace PizzaStore.Extensions
             {
                 entity.HasKey(x => x.Id);
                 entity.Property(x => x.UserName).IsRequired().HasMaxLength(20);
-                entity.Property(x => x.PasswordHash).IsRequired();
-                entity.Property(x => x.PasswordSalt).IsRequired();
                 entity.Property(x => x.CreatedAt).IsRequired();
 
                 entity.HasMany(x => x.Orders)
                       .WithOne(x => x.User)
                       .HasForeignKey(x => x.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(x => x.UserRoles)
+                      .WithOne(x => x.User)
+                      .HasForeignKey(x => x.UserId)
+                      .IsRequired();
             });
+
+            modelBuilder.Entity<AppRole>(entity =>
+            {
+                entity.HasMany(x => x.UserRoles)
+                      .WithOne(x => x.AppRole)
+                      .HasForeignKey(x => x.RoleId)
+                      .IsRequired();
+            });
+
+            modelBuilder.Entity<IdentityUserLogin<int>>().HasKey(l => l.UserId);
+            modelBuilder.Entity<IdentityUserToken<int>>().HasKey(l => l.UserId);
+            modelBuilder.Entity<AppUserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
 
         public static void ConfigureOrder(this ModelBuilder modelBuilder)

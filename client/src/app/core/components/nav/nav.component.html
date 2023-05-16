@@ -53,7 +53,7 @@
           >About us</a
         >
       </li>
-      <li class="nav-item">
+      <li *appHasRole="['Admin']" class="nav-item">
         <a class="nav-link" routerLink="/errors" routerLinkActive="active"
           >Errors</a
         >
@@ -92,16 +92,13 @@
         aria-labelledby="dropdownMenuButton"
         *dropdownMenu=""
       >
-        <a
-          class="dropdown-item"
-          routerLink="/view-profile"
-          routerLinkActive="active"
-          >View profile</a
-        >
+        <div *appHasRole="['Admin']">
+          <a class="dropdown-item" routerLink="/admin-panel">Admin panel</a>
+          <div class="dropdown-divider"></div>
+        </div>
+        <a class="dropdown-item" routerLink="/view-profile">View profile</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" routerLink="/orders" routerLinkActive="active"
-          >Orders</a
-        >
+        <a class="dropdown-item" routerLink="/orders">Orders</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" (click)="logout()">Logout</a>
       </div>

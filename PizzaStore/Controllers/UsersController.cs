@@ -2,52 +2,42 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PizzaStore.Data;
 using PizzaStore.DTOs.Users;
 using PizzaStore.Entities;
-using PizzaStore.Interfaces.Repositories;
 
 namespace PizzaStore.Controllers
 {
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly IUserRepository userRepository;
+        private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(UserManager<User> userManager, IMapper mapper)
         {
-            this.userRepository = userRepository;
+            this.userManager = userManager;
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async IAsyncEnumerable<UserDto> GetUsers()
         {
-            await foreach (var user in this.userRepository.GetUsersAsync())
+            await foreach (var user in this.userManager.Users.AsAsyncEnumerable())
             {
                 yield return mapper.Map<UserDto>(user);
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id) => mapper.Map<UserDto>(await userRepository.GetUserByIdAsync(id));
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id)
+                     => mapper.Map<UserDto>(await userManager.FindByIdAsync(id.ToString()));
 
         [HttpGet("{username}")]
-        public async Task<ActionResult<UserDto>> GetUser(string username) => mapper.Map<UserDto>(await userRepository.GetUserByUserNameAsync(username));
-
-        [HttpPost]
-        public async Task<ActionResult<UserDto>> PostUser(User user)
-        {
-            if (user is null)
-            {
-                return BadRequest("User is null");
-            }
-
-            return mapper.Map<UserDto>(await this.userRepository.PostUserAsync(user));
-        }
+        public async Task<ActionResult<UserDto>> GetUser(string username) 
+            => mapper.Map<UserDto>(await userManager.FindByNameAsync(username));
 
         [HttpPut]
         public async Task<ActionResult<bool>> UpdateUser(UserDto userDto)
@@ -57,13 +47,35 @@ namespace PizzaStore.Controllers
                 return BadRequest("User is null");
             }
 
-            return await this.userRepository.UpdateUserAsync(mapper.Map<User>(userDto));
+            var dbUser = await userManager.FindByIdAsync($"{userDto.Id}");
+
+            dbUser.Age = userDto.Age;
+            dbUser.UserName = userDto.UserName;
+            dbUser.FirstName = userDto.FirstName;
+            dbUser.LastName = userDto.LastName;
+            dbUser.City = userDto.City;
+            dbUser.Country = userDto.Country;
+            dbUser.Balance = userDto.Balance;
+
+            var result = await this.userManager.UpdateAsync(dbUser);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return true;
         }
 
         [HttpDelete]
         public async Task<ActionResult<bool>> DeleteUser(int id)
         {
-            return await this.userRepository.DeleteUserAsync(id);
+            var user = await this.userManager.FindByIdAsync($"{id}");
+
+            if (user == null) return BadRequest("User not found");
+
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return true;
         }
     }
 }
