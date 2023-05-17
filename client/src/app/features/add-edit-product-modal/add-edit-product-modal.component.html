@@ -1,5 +1,7 @@
 <div class="container mt-3">
-  <h2 class="text-center">Add product:</h2>
+  <h2 *ngIf="!isEditing" class="text-center">Add product:</h2>
+  <h2 *ngIf="isEditing" class="text-center">Update product:</h2>
+  <hr />
   <div class="d-flex flex-column justify-content-between">
     <div class="form-group">
       <label for="category">Category:</label>
@@ -46,8 +48,8 @@
         <select
           class="form-control"
           id="productSizeCount"
-          [(ngModel)]="productSizeCount"
-          (change)="onProductSizeCountChange(productSizeCount)"
+          [(ngModel)]="productSizeLength"
+          (change)="onProductSizeCountChange(productSizeLength)"
           required
         >
           <option *ngFor="let count of productSizeCountOptions">
@@ -118,11 +120,20 @@
       </div>
     </div>
     <button
+      *ngIf="!isEditing"
       type="submit"
-      class="btn btn-primary rounded-pill my-3"
+      class="btn btn-primary rounded-pill my-4"
       (click)="postProduct()"
     >
-      Submit
+      Add product
+    </button>
+    <button
+      *ngIf="isEditing"
+      type="submit"
+      class="btn btn-primary rounded-pill my-4"
+      (click)="putProduct()"
+    >
+      Update product
     </button>
   </div>
 </div>

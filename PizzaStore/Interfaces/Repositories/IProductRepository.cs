@@ -15,6 +15,8 @@ namespace PizzaStore.Interfaces.Repositories
 
         public Task<int> PostProductAsync(Product product);
 
+        public Task<bool> UpdateProductAsync(Product product, int id);
+
         public Task<bool> DeleteProductAsync(int id);
 
         //public Task<byte[]> GetProductPhotoAsync(int id);

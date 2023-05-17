@@ -1,9 +1,8 @@
+import { AddEditProductModalComponent } from 'src/app/features/add-edit-product-modal/add-edit-product-modal.component';
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from 'src/app/data/models/Product/Product';
-import { ProductSize } from 'src/app/data/models/Product/ProductSize';
 import { ProductService } from 'src/app/data/services/product.service';
-import { AddProductModalComponent } from 'src/app/features/add-product-modal/add-product-modal.component';
 import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 
 @Component({
@@ -12,10 +11,13 @@ import { ProductModalViewComponent } from 'src/app/features/productModalView/pro
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  modalRef: NgbModalRef;
+  isAdminEdit: boolean;
+
   products: Product[];
   minimalPricesToDisplay: number[];
-  sizeToDisplay: ProductSize[];
   photoToDisplay: string[];
+
   categories: string[] = ['Pizza', 'Beverages', 'Desserts', 'Other'];
 
   constructor(
@@ -63,18 +65,37 @@ export class HomeComponent implements OnInit {
   }
 
   openProductModalView(product: Product) {
-    const modalRef = this.modalService.open(ProductModalViewComponent, {
+    if (this.isAdminEdit) {
+      this.isAdminEdit = false;
+      return;
+    }
+
+    this.modalRef = this.modalService.open(ProductModalViewComponent, {
       centered: true,
       size: 'lg',
     });
 
-    modalRef.componentInstance.selectedProduct = product;
+    this.modalRef.componentInstance.selectedProduct = product;
   }
 
   openAddProductModal() {
-    this.modalService.open(AddProductModalComponent, {
+    this.modalService.open(AddEditProductModalComponent, {
       centered: true,
       size: 'lg',
     });
+  }
+
+  openEditProductModal(product: Product) {
+    this.isAdminEdit = true;
+
+    this.modalRef = this.modalService.open(AddEditProductModalComponent, {
+      centered: true,
+      size: 'lg',
+    });
+
+    this.modalRef.componentInstance.product = product;
+    this.modalRef.componentInstance.productSizeLength =
+      product.productSize.length;
+    this.modalRef.componentInstance.isEditing = this.isAdminEdit;
   }
 }

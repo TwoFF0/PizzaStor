@@ -29,7 +29,13 @@ export class ProductService {
 
   async postProduct(product: Product) {
     return (await this.httpClient
-      .post<Product>(`${this.baseUrl}products`, product)
-      .toPromise()) as Product;
+      .post<number>(`${this.baseUrl}products`, product)
+      .toPromise()) as number;
+  }
+
+  async putProduct(product: Product) {
+    return (await this.httpClient
+      .put<boolean>(`${this.baseUrl}products/${product.id}`, product)
+      .toPromise()) as boolean;
   }
 }

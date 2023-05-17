@@ -1,4 +1,4 @@
-import { EditRolesComponent } from './features/edit-roles/edit-roles.component';
+import { AddEditProductModalComponent } from './features/add-edit-product-modal/add-edit-product-modal.component';
 import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 import { CartComponent } from './features/cart/cart.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CookieService } from 'ngx-cookie-service';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +26,7 @@ import { HomeComponent } from './core/components/home/home.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { AdminComponent } from './core/components/pages/admin/admin.component';
 import { HasRoleDirective } from './core/directives/has-role.directive';
-import { AddProductModalComponent } from './features/add-product-modal/add-product-modal.component';
+import { EditRolesComponent } from './features/edit-roles-modal/edit-roles.component';
 
 @NgModule({
   declarations: [
@@ -45,8 +44,8 @@ import { AddProductModalComponent } from './features/add-product-modal/add-produ
     AuthenticateModalComponent,
     AdminComponent,
     HasRoleDirective,
+    AddEditProductModalComponent,
     EditRolesComponent,
-    AddProductModalComponent,
   ],
   imports: [
     BrowserModule,

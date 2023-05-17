@@ -43,15 +43,29 @@ namespace PizzaStore.Controllers
 
         [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
-        public async Task<ActionResult<int>> PostProduct(ProductDto product)
+        public async Task<ActionResult<int>> PostProduct(ProductDto productDto)
         {
-            if (product is null)
+            if (productDto is null)
             {
                 return BadRequest("Product object is null!");
             }
 
-            return Ok(await repository.PostProductAsync(mapper.Map<Product>(product)));
+            return Ok(await repository.PostProductAsync(mapper.Map<Product>(productDto)));
         }
+
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<bool>> UpdateProduct(ProductDto productDto, int id)
+        {
+            if (productDto is null)
+            {
+                return BadRequest("Product object is null!");
+            }
+
+            return Ok(await repository.UpdateProductAsync(mapper.Map<Product>(productDto), id));
+        }
+
+
 
         [HttpDelete]
         public async Task<ActionResult<bool>> DeleteProduct(int id) => Ok(await repository.DeleteProductAsync(id));

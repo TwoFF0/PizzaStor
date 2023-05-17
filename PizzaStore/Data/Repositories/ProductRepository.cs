@@ -47,6 +47,25 @@ namespace PizzaStore.Data.Repositories
             return toReturn.Entity.Id;
         }
 
+        public async Task<bool> UpdateProductAsync(Product product, int id)
+        {
+            var foundedProduct = await this.context.Products.FindAsync(id);
+
+            if(foundedProduct == null)
+            {
+                return false;
+            }
+
+            foundedProduct.Name = product.Name;
+            foundedProduct.Description = product.Description;
+            foundedProduct.Category = product.Category;
+            foundedProduct.ProductSizes = product.ProductSizes;
+            await this.context.SaveChangesAsync();
+
+            return true;
+        }
+
+
         public async Task<bool> DeleteProductAsync(int id)
         {
             var product = await this.context.Products.FindAsync(id);
