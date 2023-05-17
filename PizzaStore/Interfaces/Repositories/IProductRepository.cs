@@ -13,7 +13,7 @@ namespace PizzaStore.Interfaces.Repositories
 
         public IAsyncEnumerable<Product> GetAllProductsAsync();
 
-        public Task<Product> PostProductAsync(Product product);
+        public Task<int> PostProductAsync(Product product);
 
         public Task<bool> DeleteProductAsync(int id);
 

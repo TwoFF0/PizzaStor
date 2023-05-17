@@ -10,7 +10,7 @@
   <ng-container *ngIf="products">
     <article
       *ngFor="let product of filterProductsByCategory(category); let i = index"
-      (click)="openModal(product)"
+      (click)="openProductModalView(product)"
       class="col-sm-3 mb-5 me-0 mt-2 p-0"
     >
       <main style="height: 450px">
@@ -22,7 +22,9 @@
         <p class="text-muted text-sm">{{ product.description }}</p>
       </main>
       <footer class="d-flex align-items-center justify-content-between">
-        <p class="h3 text-black">From ${{ minimalPricesToDisplay[i] }} US</p>
+        <p class="h3 text-black">
+          From ${{ minimalPricesToDisplay[i].toFixed(2) }} US
+        </p>
         <button
           class="btn btn-primary btn-block rounded-pill mb-2 me-3 opacity-75"
           style="min-width: 100px"
@@ -32,4 +34,18 @@
       </footer>
     </article>
   </ng-container>
+  <article
+    *appHasRole="['Admin']"
+    (click)="openAddProductModal()"
+    class="col-sm-3 mb-5 me-0 mt-4 p-0"
+  >
+    <main style="height: 300px">
+      <button
+        class="btn rounded-lg shadow-sm"
+        style="height: 300px; background-color: rgb(253, 244, 244); width: 100%"
+      >
+        <i class="fa fa-plus fa-5x text-muted"></i>
+      </button>
+    </main>
+  </article>
 </section>

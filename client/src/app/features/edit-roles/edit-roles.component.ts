@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/data/models/User/User';

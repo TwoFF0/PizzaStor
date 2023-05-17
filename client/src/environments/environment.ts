@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000/api/',
-  APP_NAME: 'Bomb Pizza',
+  APP_NAME: 'Pizza 404',
 };
 
 /*

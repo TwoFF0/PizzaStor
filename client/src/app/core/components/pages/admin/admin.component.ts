@@ -1,8 +1,8 @@
+import { EditRolesComponent } from 'src/app/features/edit-roles/edit-roles.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/data/models/User/User';
 import { AdminService } from 'src/app/data/services/admin.service';
-import { EditRolesComponent } from 'src/app/features/editRolesModal/edit-roles/edit-roles.component';
 
 @Component({
   selector: 'app-admin',

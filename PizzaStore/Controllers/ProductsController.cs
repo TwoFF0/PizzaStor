@@ -1,14 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PizzaStore.DTOs.Products;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PizzaStore.Controllers
 {
@@ -44,15 +41,16 @@ namespace PizzaStore.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
-        public async Task<ActionResult<ProductDto>> PostProduct(Product product)
+        public async Task<ActionResult<int>> PostProduct(ProductDto product)
         {
             if (product is null)
             {
                 return BadRequest("Product object is null!");
             }
 
-            return Ok(mapper.Map<ProductDto>(await repository.PostProductAsync(product)));
+            return Ok(await repository.PostProductAsync(mapper.Map<Product>(product)));
         }
 
         [HttpDelete]

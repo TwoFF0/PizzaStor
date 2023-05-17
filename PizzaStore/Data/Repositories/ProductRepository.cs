@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PizzaStore.DTOs.Products;
 using PizzaStore.Entities;
 using PizzaStore.Interfaces.Repositories;
 
@@ -38,12 +39,12 @@ namespace PizzaStore.Data.Repositories
             }
         }
 
-        public async Task<Product> PostProductAsync(Product product)
+        public async Task<int> PostProductAsync(Product product)
         {
             var toReturn = await this.context.AddAsync(product);
             await this.context.SaveChangesAsync();
 
-            return toReturn.Entity;
+            return toReturn.Entity.Id;
         }
 
         public async Task<bool> DeleteProductAsync(int id)

@@ -12,9 +12,9 @@ namespace PizzaStore.Infrastructure
         {
             CreateMap<User, UserDto>().ReverseMap();
 
-            CreateMap<ProductSize, ProductSizeDto>();
+            CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
             CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.ProductSize, opt => opt.MapFrom(src => src.ProductSizes));
+                .ForMember(dest => dest.ProductSize, opt => opt.MapFrom(src => src.ProductSizes)).ReverseMap();
 
             CreateMap<OrderDetail, OrderDetailDto>().ReverseMap();
             CreateMap<Order, OrderDto>()

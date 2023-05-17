@@ -1,3 +1,4 @@
+import { EditRolesComponent } from './features/edit-roles/edit-roles.component';
 import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 import { CartComponent } from './features/cart/cart.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -26,7 +27,7 @@ import { HomeComponent } from './core/components/home/home.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { AdminComponent } from './core/components/pages/admin/admin.component';
 import { HasRoleDirective } from './core/directives/has-role.directive';
-import { EditRolesComponent } from './features/editRolesModal/edit-roles/edit-roles.component';
+import { AddProductModalComponent } from './features/add-product-modal/add-product-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { EditRolesComponent } from './features/editRolesModal/edit-roles/edit-ro
     AdminComponent,
     HasRoleDirective,
     EditRolesComponent,
+    AddProductModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,6 @@ import { EditRolesComponent } from './features/editRolesModal/edit-roles/edit-ro
       multi: true,
     },
     NgbActiveModal,
-    [CookieService],
   ],
   bootstrap: [AppComponent],
 })

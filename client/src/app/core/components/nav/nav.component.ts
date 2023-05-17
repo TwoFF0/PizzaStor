@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from 'src/app/data/services/cart.service';
 import { AuthenticateModalComponent } from 'src/app/features/auth/authenticate-modal.component';
 import { User } from 'src/app/data/models/User/User';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-nav',
@@ -14,6 +15,7 @@ import { User } from 'src/app/data/models/User/User';
 })
 export class NavComponent implements OnInit {
   user: User;
+  appName = environment.APP_NAME;
 
   constructor(
     public accountService: AccountService,

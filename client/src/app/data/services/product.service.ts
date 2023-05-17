@@ -26,4 +26,10 @@ export class ProductService {
 
     return this.products as Product[];
   }
+
+  async postProduct(product: Product) {
+    return (await this.httpClient
+      .post<Product>(`${this.baseUrl}products`, product)
+      .toPromise()) as Product;
+  }
 }

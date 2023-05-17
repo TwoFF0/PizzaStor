@@ -29,9 +29,9 @@ namespace PizzaStore.Extensions
 
             string[] photos =
             {
-                "https://cdn.dodostatic.net/static/Img/Products/de603d5d277e4803af12f72101caf067_233x233.png",
-                "https://cdn.dodostatic.net/static/Img/Products/f04f6e1cd2004bfa83389a3563076053_292x292.png",
-                "https://cdn.dodostatic.net/static/Img/Products/85286afe65d6492f9f0cabdb41886e4f_366x366.png"
+                "https://dodopizza-a.akamaihd.net/static/Img/Products/ace34b88215e4ee790cf090cba9d9e6a_292x292.png",
+                "https://dodopizza-a.akamaihd.net/static/Img/Products/4fa4de77d8a34912830cfdbedfaff698_292x292.png",
+                "https://dodopizza-a.akamaihd.net/static/Img/Products/b68c363a26644118806d07435d9b2806_292x292.png"
             };
 
             string[] otherPhotos =
@@ -157,6 +157,7 @@ namespace PizzaStore.Extensions
                 var admin = new User
                 {
                     UserName = "admin",
+                    Balance = double.MaxValue
                 };
 
                 await userManager.CreateAsync(admin, "strongPassword");

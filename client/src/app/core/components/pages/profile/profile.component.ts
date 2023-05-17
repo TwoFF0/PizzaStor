@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
     roles: {} as string[],
   };
   editing = false;
-  balanceString = `$${this.user.balance.toFixed(2).toString()}`;
+  balanceString: string = '';
 
   profileForm: FormGroup;
 
@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.user = await this.userService.getUserFromLocalStorage();
+    this.balanceString = `$${this.user.balance.toFixed(2).toString()}`;
   }
 
   async updateUser(user: User) {
@@ -51,14 +52,5 @@ export class ProfileComponent implements OnInit {
         'Something went wrong while we were updating your info'
       );
     }
-  }
-
-  isInvalidField(fieldName: string): boolean {
-    const field = this.profileForm.get(fieldName)!;
-    return field?.invalid && (field?.dirty || field?.touched);
-  }
-
-  toggleEditing() {
-    this.editing = !this.editing;
   }
 }

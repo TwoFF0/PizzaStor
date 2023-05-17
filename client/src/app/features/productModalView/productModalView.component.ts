@@ -16,6 +16,7 @@ export class ProductModalViewComponent implements OnInit {
   passEntry: EventEmitter<any> = new EventEmitter();
 
   selectedSize: ProductSize;
+  imageSize: number = 292;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -40,17 +41,22 @@ export class ProductModalViewComponent implements OnInit {
         this.selectedSize = this.selectedProduct.productSize.filter(
           (x) => x.size == size
         )[0];
+        this.imageSize = 366;
+
         break;
       case 'M':
         this.selectedSize = this.selectedProduct.productSize.filter(
           (x) => x.size == size
         )[0];
+        this.imageSize = 292;
 
         break;
       case 'S':
         this.selectedSize = this.selectedProduct.productSize.filter(
           (x) => x.size == size
         )[0];
+        this.imageSize = 233;
+
         break;
     }
   }

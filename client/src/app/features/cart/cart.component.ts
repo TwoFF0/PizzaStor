@@ -77,7 +77,7 @@ export class CartComponent implements OnInit {
         ...user,
         balance: +(balance - this.total).toFixed(2),
       };
-      
+
       const isUpdated = await this.userService.updateUser(updatedUser);
 
       if (!isUpdated) {
