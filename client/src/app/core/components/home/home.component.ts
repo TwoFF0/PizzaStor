@@ -5,6 +5,13 @@ import { Product } from 'src/app/data/models/Product/Product';
 import { ProductService } from 'src/app/data/services/product.service';
 import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
 
+interface ProductView {
+  [name: string]: {
+    minPrices: number[];
+    photos: string[];
+  };
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,8 +22,7 @@ export class HomeComponent implements OnInit {
   isAdminEdit: boolean;
 
   products: Product[];
-  minimalPricesToDisplay: number[];
-  photoToDisplay: string[];
+  view: ProductView = {};
 
   categories: string[] = ['Pizza', 'Beverages', 'Desserts', 'Other'];
 
@@ -27,41 +33,32 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getProducts();
+    this.configureViewProduct();
   }
 
-  async getProducts() {
+  private async getProducts() {
     this.products = await this.productService.getProducts();
   }
 
   filterProductsByCategory(category: string) {
-    this.getMinimalPricesToDisplay(category);
-    this.retrievePhoto(category);
     return this.products.filter((x) => x.category === category);
   }
 
-  getMinimalPricesToDisplay(category: string) {
-    this.minimalPricesToDisplay = this.products
-      .filter((x) => x.category == category)
-      .map((product) => {
-        const productPrices = product.productSize.map((size) => size.price);
-        const minPrice = Math.min(...productPrices);
-        return minPrice;
-      });
+  private getMinimalPricesToDisplay(category: string): number[] {
+    const productsByCategory = this.filterProductsByCategory(category);
+    return productsByCategory.map((product) =>
+      Math.min(...product.productSize.map((size) => size.price))
+    );
   }
 
-  retrievePhoto(category: string) {
-    this.photoToDisplay = this.products
-      .filter((prod) => prod.category === category)
-      .map((product) => {
-        const sizesToCheck = ['L', 'M', 'S', null];
-        for (const size of sizesToCheck) {
-          const matchingSize = product.productSize.find((x) => x.size === size);
-          if (matchingSize) {
-            return matchingSize.imageUrl;
-          }
-        }
-        return '';
-      });
+  private retrievePhoto(category: string): string[] {
+    const productsByCategory = this.filterProductsByCategory(category);
+    return productsByCategory.map((product) => {
+      const matchingSize = product.productSize.find(
+        (x) => x.size === 'L' || x.size === 'M' || x.size === 'S'
+      );
+      return matchingSize?.imageUrl || '';
+    });
   }
 
   openProductModalView(product: Product) {
@@ -97,5 +94,14 @@ export class HomeComponent implements OnInit {
     this.modalRef.componentInstance.productSizeLength =
       product.productSize.length;
     this.modalRef.componentInstance.isEditing = this.isAdminEdit;
+  }
+
+  private configureViewProduct(): void {
+    this.categories.forEach((category) => {
+      this.view[category] = {
+        minPrices: this.getMinimalPricesToDisplay(category),
+        photos: this.retrievePhoto(category),
+      };
+    });
   }
 }

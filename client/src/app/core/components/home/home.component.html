@@ -28,14 +28,14 @@
         </div>
         <img
           class="rounded mx-auto d-block mt-0 mx-0"
-          src="{{ photoToDisplay[i] }}"
+          src="{{ view[category].photos[i] }}"
         />
         <p class="h4">{{ product.name }}</p>
         <p class="text-muted text-sm">{{ product.description }}</p>
       </main>
       <footer class="d-flex align-items-center justify-content-between mt-4">
         <p class="h3 text-black">
-          From ${{ minimalPricesToDisplay[i].toFixed(2) }} US
+          From ${{ view[category].minPrices[i].toFixed(2) }} US
         </p>
         <button
           class="btn btn-primary btn-block rounded-pill mb-2 me-3 opacity-75"
