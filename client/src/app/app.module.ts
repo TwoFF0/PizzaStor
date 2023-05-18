@@ -27,6 +27,7 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { AdminComponent } from './core/components/pages/admin/admin.component';
 import { HasRoleDirective } from './core/directives/has-role.directive';
 import { EditRolesComponent } from './features/edit-roles-modal/edit-roles.component';
+import { DeleteProductModalComponent } from './features/delete-product-modal/delete-product-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { EditRolesComponent } from './features/edit-roles-modal/edit-roles.compo
     HasRoleDirective,
     AddEditProductModalComponent,
     EditRolesComponent,
+    DeleteProductModalComponent,
   ],
   imports: [
     BrowserModule,

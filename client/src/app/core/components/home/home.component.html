@@ -25,6 +25,13 @@
           >
             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
           </button>
+          <button
+            class="btn btn-outline-secondary ms-1 me-4"
+            (click)="openDeleteProductModal(product.id)"
+            type="button"
+          >
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
         </div>
         <img
           class="rounded mx-auto d-block mt-0 mx-0"

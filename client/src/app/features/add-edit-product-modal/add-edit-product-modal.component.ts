@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Product } from 'src/app/data/models/Product/Product';
@@ -27,6 +28,7 @@ export class AddEditProductModalComponent implements OnInit {
         category: '',
         name: '',
         description: '',
+        isDeleted: false,
         productSize: [],
       };
 
@@ -61,7 +63,7 @@ export class AddEditProductModalComponent implements OnInit {
       return;
     }
 
-    this.toastr.error('Something happend when adding product :(');
+    this.toastr.error('Something happend with adding product :(');
   }
 
   async putProduct() {
@@ -75,7 +77,7 @@ export class AddEditProductModalComponent implements OnInit {
       return;
     }
 
-    this.toastr.error('Something happend when adding product :(');
+    this.toastr.error('Something happend with updating product :(');
   }
 
   private checkProductSizeIsWS() {

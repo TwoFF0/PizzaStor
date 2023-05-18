@@ -66,8 +66,8 @@ namespace PizzaStore.Controllers
         }
 
 
-
-        [HttpDelete]
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeleteProduct(int id) => Ok(await repository.DeleteProductAsync(id));
 
         //[HttpGet("{id:int}/image")]

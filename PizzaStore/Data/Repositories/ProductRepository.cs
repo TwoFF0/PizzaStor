@@ -22,7 +22,6 @@ namespace PizzaStore.Data.Repositories
 
         public async IAsyncEnumerable<Product> GetProductsByCategoryAsync(string category)
         {
-
             await foreach (var product in this.context.Products.Where(x => x.Category == category).Include(x => x.ProductSizes).AsAsyncEnumerable())
             {
                 yield return product;
@@ -31,8 +30,6 @@ namespace PizzaStore.Data.Repositories
 
         public async IAsyncEnumerable<Product> GetAllProductsAsync()
         {
-
-
             await foreach (var product in this.context.Products.Include(x => x.ProductSizes).AsAsyncEnumerable())
             {
                 yield return product;
@@ -72,9 +69,10 @@ namespace PizzaStore.Data.Repositories
 
             if (product is null) return false;
 
-            this.context.Products.Remove(product);
-            return true;
+            product.IsDeleted = true;
+            await this.context.SaveChangesAsync();
 
+            return true;
         }
 
         //public async Task<byte[]> GetProductPhotoAsync(int id)

@@ -13,6 +13,8 @@ namespace PizzaStore.DTOs.Products
 
         public string Description { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public IEnumerable<ProductSizeDto> ProductSize { get; set; }
     }
 }

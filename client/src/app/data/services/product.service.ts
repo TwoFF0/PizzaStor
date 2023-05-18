@@ -38,4 +38,11 @@ export class ProductService {
       .put<boolean>(`${this.baseUrl}products/${product.id}`, product)
       .toPromise()) as boolean;
   }
+
+  async deleteProduct(productId: number) {
+    console.log('in delete service');
+    return (await this.httpClient
+      .delete<boolean>(`${this.baseUrl}products/${productId}`)
+      .toPromise()) as boolean;
+  }
 }

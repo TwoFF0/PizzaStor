@@ -13,6 +13,8 @@ namespace PizzaStore.Entities
 
         public string Description { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public virtual IEnumerable<ProductSize> ProductSizes { get; set; }
     }
 }

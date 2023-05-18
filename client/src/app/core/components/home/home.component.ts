@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from 'src/app/data/models/Product/Product';
 import { ProductService } from 'src/app/data/services/product.service';
 import { ProductModalViewComponent } from 'src/app/features/productModalView/productModalView.component';
+import { DeleteProductModalComponent } from 'src/app/features/delete-product-modal/delete-product-modal.component';
 
 interface ProductView {
   [name: string]: {
@@ -19,7 +20,7 @@ interface ProductView {
 })
 export class HomeComponent implements OnInit {
   modalRef: NgbModalRef;
-  isAdminEdit: boolean;
+  isAdminClick: boolean;
 
   products: Product[];
   view: ProductView = {};
@@ -37,7 +38,9 @@ export class HomeComponent implements OnInit {
   }
 
   private async getProducts() {
-    this.products = await this.productService.getProducts();
+    this.products = (await this.productService.getProducts()).filter(
+      (x) => !x.isDeleted
+    );
   }
 
   filterProductsByCategory(category: string) {
@@ -55,15 +58,16 @@ export class HomeComponent implements OnInit {
     const productsByCategory = this.filterProductsByCategory(category);
     return productsByCategory.map((product) => {
       const matchingSize = product.productSize.find(
-        (x) => x.size === 'L' || x.size === 'M' || x.size === 'S'
+        (x) =>
+          x.size === 'L' || x.size === 'M' || x.size === 'S' || x.size === null
       );
       return matchingSize?.imageUrl || '';
     });
   }
 
   openProductModalView(product: Product) {
-    if (this.isAdminEdit) {
-      this.isAdminEdit = false;
+    if (this.isAdminClick) {
+      this.isAdminClick = false;
       return;
     }
 
@@ -83,7 +87,7 @@ export class HomeComponent implements OnInit {
   }
 
   openEditProductModal(product: Product) {
-    this.isAdminEdit = true;
+    this.isAdminClick = true;
 
     this.modalRef = this.modalService.open(AddEditProductModalComponent, {
       centered: true,
@@ -93,7 +97,18 @@ export class HomeComponent implements OnInit {
     this.modalRef.componentInstance.product = product;
     this.modalRef.componentInstance.productSizeLength =
       product.productSize.length;
-    this.modalRef.componentInstance.isEditing = this.isAdminEdit;
+    this.modalRef.componentInstance.isEditing = this.isAdminClick;
+  }
+
+  openDeleteProductModal(productId: number) {
+    this.isAdminClick = true;
+
+    this.modalRef = this.modalService.open(DeleteProductModalComponent, {
+      centered: true,
+      size: 'md',
+    });
+
+    this.modalRef.componentInstance.productId = productId;
   }
 
   private configureViewProduct(): void {
